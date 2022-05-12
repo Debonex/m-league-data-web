@@ -9,8 +9,13 @@ module.exports = {
         secondary: "#181b22",
         outstand: "#21242b",
       },
-      white: {
-        main: "#ffffff",
+      white: "#ffffff",
+      gold: "#f8d87e",
+      silver: "#cbcbcb",
+      bronze: "#d69f81",
+      primary: {
+        main: "#2b7fd5",
+        outstand: "#4a6494",
       },
     },
     maxWidth: {

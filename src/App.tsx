@@ -10,7 +10,7 @@ const App: FC = () => {
     <div
       className={clsx([
         "h-screen w-screen overflow-auto",
-        "dark:bg-dark-main dark:text-white-main",
+        "dark:text-white dark:bg-dark-main",
       ])}
     >
       <Navigator className="sticky top-0" />
