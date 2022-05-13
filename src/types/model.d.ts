@@ -4,13 +4,14 @@ type ProInfo = {
 };
 
 type ProValue = {
-  id: number;
+  pro_id: number;
   pro_name: string;
   value: number;
 };
 
 type SeasonInfo = {
   id: number;
+  season_year_id: number;
   season_name: string;
   season_type: "regular" | "semi_final" | "final";
 };

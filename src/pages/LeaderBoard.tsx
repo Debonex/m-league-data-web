@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { FC, useCallback, useEffect, useState } from "react";
 import api from "../api";
+import Checkbox from "../components/Checkbox";
 
 const percentage = (value: number) => `${(value * 100).toFixed(2)}%`;
 const fixed = (num: number) => (value: number) => `${value.toFixed(num)}`;
@@ -32,7 +33,7 @@ const ranks: Rankable[] = [
 ];
 
 type ProRankItem = {
-  id: number;
+  pro_id: number;
   pro_name: string;
   value: number | string;
 };
@@ -41,10 +42,14 @@ const LeaderBoard: FC = () => {
   const [rank, setRank] = useState<Rankable>({ key: "point", label: "Point" });
   const [list, setList] = useState<ProRankItem[]>([]);
   const [seasons, setSeasons] = useState<SeasonInfo[]>([]);
+  const [chosenSeasons, setChosenSeasons] = useState<number[]>([]);
   const [seasonYears, setSeasonYears] = useState<SeasonYearInfo[]>([]);
 
   const fetchRank = useCallback(async () => {
-    const res = await api.post<ProValue[]>("/pro/rank", { key: rank.key });
+    const res = await api.post<ProValue[]>("/pro/rank", {
+      key: rank.key,
+      ...(seasons.length ? { seasons: chosenSeasons } : {}),
+    });
     if (res.status === 200) {
       if (!rank.asc) {
         res.data.sort((a, b) => b.value - a.value);
@@ -61,7 +66,7 @@ const LeaderBoard: FC = () => {
         setList(res.data);
       }
     }
-  }, [rank]);
+  }, [rank, chosenSeasons]);
 
   useEffect(() => {
     fetchRank();
@@ -74,10 +79,20 @@ const LeaderBoard: FC = () => {
     ]).then((results) => {
       if (results[0].status === 200 && results[1].status === 200) {
         setSeasons(results[0].data);
+        setChosenSeasons(results[0].data.map((item) => item.id));
         setSeasonYears(results[1].data);
       }
     });
   }, []);
+
+  const handleSeasonChange = (targetId: number, checked: boolean) => {
+    if (checked) {
+      setChosenSeasons([...chosenSeasons, targetId]);
+    } else {
+      setChosenSeasons(chosenSeasons.filter((id) => id !== targetId));
+    }
+    fetchRank();
+  };
 
   return (
     <div className="mx-auto flex max-w-1920 p-4">
@@ -92,6 +107,7 @@ const LeaderBoard: FC = () => {
                 item.key === rank.key,
             })}
             onClick={() => setRank(item)}
+            key={item.key}
           >
             <div>{item.label}</div>
           </div>
@@ -105,7 +121,21 @@ const LeaderBoard: FC = () => {
             "mb-4 rounded-lg border-2 p-3",
             "dark:border-dark-outstand dark:bg-dark-secondary",
           ])}
-        ></div>
+        >
+          {/* seasons */}
+          <div className="flex flex-wrap">
+            {seasons.map((season) => (
+              <Checkbox
+                key={season.id}
+                value={season.id}
+                onChange={handleSeasonChange}
+                defaultChecked={true}
+                label={season.season_name.replace("赛季", "")}
+              />
+            ))}
+          </div>
+        </div>
+
         {/* rank items */}
         <div
           className={clsx([
@@ -120,7 +150,7 @@ const LeaderBoard: FC = () => {
           </div>
           {list.map((item, idx) => (
             <RankItem
-              key={item.id}
+              key={item.pro_id}
               rank={idx + 1}
               name={item.pro_name}
               value={item.value}

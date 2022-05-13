@@ -21,5 +21,10 @@ module.exports = {
     maxWidth: {
       1920: "1920px",
     },
+    extend: {
+      strokeWidth: {
+        3: "3px",
+      },
+    },
   },
 };
