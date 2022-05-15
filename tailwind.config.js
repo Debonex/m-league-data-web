@@ -17,6 +17,7 @@ module.exports = {
         main: "#2b7fd5",
         outstand: "#4a6494",
       },
+      current: "currentColor",
     },
     maxWidth: {
       1920: "1920px",
@@ -24,6 +25,24 @@ module.exports = {
     extend: {
       strokeWidth: {
         3: "3px",
+      },
+      keyframes: {
+        "delay-in": {
+          "0%": { opacity: 0 },
+          "99%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+        "loading-circle": {
+          "0%": { "stroke-dasharray": "1px, 200px", "stroke-dashoffset": 0 },
+          "50%": {
+            "stroke-dasharray": "100px, 200px",
+            "stroke-dashoffset": "-15px",
+          },
+          "100%": {
+            "stroke-dasharray": "100px, 200px",
+            "stroke-dashoffset": "-125px",
+          },
+        },
       },
     },
   },

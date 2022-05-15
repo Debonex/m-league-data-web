@@ -3,17 +3,14 @@ import { FC, useState } from "react";
 
 type CheckboxProps = {
   value: any;
-  defaultChecked?: boolean;
-  onChange: (value: any, checked: boolean) => void;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
   label?: string;
 };
 
 const Checkbox: FC<CheckboxProps> = (props) => {
-  const [checked, setChecked] = useState(props.defaultChecked ?? false);
-
   const handleClick = () => {
-    props.onChange(props.value, !checked);
-    setChecked(!checked);
+    props.onChange(!props.checked);
   };
 
   return (
@@ -27,8 +24,8 @@ const Checkbox: FC<CheckboxProps> = (props) => {
           className={clsx({
             "absolute top-1/4 left-1/4 h-1/2 w-1/2 border-2 transition-colors":
               true,
-            "border-primary-main bg-primary-main": checked,
-            "dark:border-dark-outstand": !checked,
+            "border-primary-main bg-primary-main": props.checked,
+            "dark:border-dark-outstand": !props.checked,
           })}
         >
           <svg className="h-full w-full" viewBox="0 0 24 24">
@@ -37,7 +34,7 @@ const Checkbox: FC<CheckboxProps> = (props) => {
               fill="none"
               className="stroke-white stroke-3 transition-all"
               style={{
-                strokeDashoffset: checked ? 0 : 29.78,
+                strokeDashoffset: props.checked ? 0 : 29.78,
                 strokeDasharray: 29.78,
               }}
             />

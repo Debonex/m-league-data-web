@@ -10,10 +10,10 @@ const App: FC = () => {
     <div
       className={clsx([
         "h-screen w-screen overflow-auto",
-        "dark:text-white dark:bg-dark-main",
+        "dark:bg-dark-main dark:text-white",
       ])}
     >
-      <Navigator className="sticky top-0" />
+      <Navigator className="sticky top-0 z-50" />
       <Routes>
         <Route path="*" element={<Teams />} />
         <Route path="/teams" element={<Teams />} />
