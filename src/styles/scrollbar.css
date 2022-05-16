@@ -1,14 +1,14 @@
 .dark *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-  background: #1d1f27;
+  background: #15171f;
 }
 
 .dark *::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background: #2b7fd5;
+  background: #4a6494;
 }
 
-.dark *::-webkit-scrollbar-thumb :hover {
+.dark *::-webkit-scrollbar-thumb:hover {
   background: #2b7fd5;
 }

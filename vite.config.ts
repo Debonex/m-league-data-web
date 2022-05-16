@@ -1,9 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import viteSvgr from "vite-plugin-svgr";
 import { resolve } from "path";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), viteSvgr()],
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
