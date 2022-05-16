@@ -1,9 +1,10 @@
 import clsx from "clsx";
-import { FC, useEffect, useState } from "react";
+import { FC, MouseEventHandler, useEffect, useState } from "react";
 import api from "../api";
 import Button from "../components/Button";
 import Checkbox from "../components/Checkbox";
 import InnerLoading from "../components/InnerLoading";
+import { ReactComponent as FilterSvg } from "../components/svg/Filter.svg";
 
 const percentage = (value: number) => `${(value * 100).toFixed(2)}%`;
 const fixed = (num: number) => (value: number) => `${value.toFixed(num)}`;
@@ -41,11 +42,14 @@ type ProRankItem = {
 };
 
 const LeaderBoard: FC = () => {
+  // current rankable item
   const [rank, setRank] = useState<Rankable>({ key: "point", label: "Point" });
   const [list, setList] = useState<ProRankItem[]>([]);
   const [seasons, setSeasons] = useState<SeasonInfo[]>([]);
   const [chosenSeasons, setChosenSeasons] = useState<number[]>([]);
   const [seasonYears, setSeasonYears] = useState<SeasonYearInfo[]>([]);
+  // if mobile rankable items show
+  const [rankableShow, setRankableShow] = useState(false);
   const [filterLoading, setFilterLoading] = useState(true);
   const [listLoading, setListLoading] = useState(false);
 
@@ -111,30 +115,64 @@ const LeaderBoard: FC = () => {
   return (
     <div className="mx-auto flex max-w-1920 p-4">
       {/* rankable items */}
-      <div className="flex flex-col">
+      <div className="hidden flex-col md:flex">
         {ranks.map((item) => (
-          <div
-            className={clsx({
-              "mb-2 cursor-pointer rounded-lg border-2 p-3": true,
-              "dark:border-dark-outstand": item.key !== rank.key,
-              "border-primary-outstand bg-gradient-to-r from-primary-main/25 dark:to-dark-outstand":
-                item.key === rank.key,
-            })}
-            onClick={() => setRank(item)}
+          <RankableItem
             key={item.key}
-          >
-            <div>{item.label}</div>
-          </div>
+            currentRank={rank}
+            rank={item}
+            onClick={() => setRank(item)}
+            className="mb-2"
+          />
         ))}
+      </div>
+
+      {/* mobile: rankable items */}
+      <div
+        className={clsx(
+          "fixed bottom-0 left-0 z-40 grid h-screen w-screen grid-cols-2 gap-2 overflow-auto p-2 transition-transform",
+          "dark:bg-dark-main/95",
+          {
+            "translate-y-full": !rankableShow,
+            "translate-y-0": rankableShow,
+          }
+        )}
+      >
+        {ranks.map((item) => (
+          <RankableItem
+            key={item.key}
+            rank={item}
+            currentRank={rank}
+            onClick={() => {
+              setRank(item);
+              setRankableShow(false);
+            }}
+          />
+        ))}
+      </div>
+
+      {/* mobile: show rankable items button */}
+      <div
+        className={clsx(
+          "fixed bottom-0 right-0 z-50 cursor-pointer select-none rounded-tl-full border-l-2 border-t-2 border-primary-main p-4 text-primary-main md:hidden",
+          "dark:bg-dark-deep/90"
+        )}
+        onClick={() => setRankableShow(!rankableShow)}
+      >
+        <FilterSvg
+          height={20}
+          width={20}
+          className="translate-x-1.5 translate-y-1.5"
+        />
       </div>
 
       <div className="ml-4 flex-grow">
         {/* filters */}
         <div
-          className={clsx([
+          className={clsx(
             "relative mb-4 rounded-lg border-2 p-3",
-            "dark:border-dark-outstand dark:bg-dark-secondary",
-          ])}
+            "dark:border-dark-outstand dark:bg-dark-secondary"
+          )}
         >
           {/* seasons */}
           <div className="flex flex-wrap">
@@ -172,13 +210,13 @@ const LeaderBoard: FC = () => {
 
         {/* rank items */}
         <div
-          className={clsx([
+          className={clsx(
             "relative rounded-lg border-2 p-3",
-            "dark:border-dark-outstand dark:bg-dark-secondary",
-          ])}
+            "dark:border-dark-outstand dark:bg-dark-secondary"
+          )}
         >
-          <div className={clsx(["flex py-2", "dark:text-white/50"])}>
-            <div className="w-1/5 pl-5">排名</div>
+          <div className={clsx("flex py-2", "dark:text-white/50")}>
+            <div className="w-20 pl-5 md:w-1/5">排名</div>
             <div className="flex-shrink-0 flex-grow basis-0">姓名</div>
             <div className="flex-shrink-0 flex-grow basis-0">{rank.label}</div>
           </div>
@@ -211,6 +249,32 @@ const LeaderBoard: FC = () => {
   );
 };
 
+const RankableItem: FC<{
+  rank: Rankable;
+  currentRank: Rankable;
+  onClick: MouseEventHandler;
+  className?: string;
+}> = (props) => {
+  const rank = props.rank;
+  const currentRank = props.currentRank;
+  return (
+    <div
+      className={clsx(
+        "cursor-pointer select-none whitespace-nowrap rounded-lg border-2 p-3",
+        {
+          "dark:border-dark-outstand": rank.key !== currentRank.key,
+          "border-primary-outstand bg-gradient-to-r from-primary-main/25 dark:to-dark-outstand":
+            rank.key === currentRank.key,
+        },
+        props.className
+      )}
+      onClick={props.onClick}
+    >
+      <div>{rank.label}</div>
+    </div>
+  );
+};
+
 const RankItem: FC<{
   rank: number;
   name: string;
@@ -220,25 +284,25 @@ const RankItem: FC<{
 }> = (props) => {
   return (
     <div
-      className={clsx([
+      className={clsx(
         "group mt-1 flex items-center rounded-l-lg",
-        "dark:odd:bg-dark-outstand",
-      ])}
+        "dark:odd:bg-dark-outstand"
+      )}
     >
       <div
-        className={clsx([
-          "w-1/5 rounded-l-lg bg-gradient-to-r py-2",
-          props.rankOuterClass,
-        ])}
+        className={clsx(
+          "w-20 rounded-l-lg bg-gradient-to-r py-2 md:w-1/5",
+          props.rankOuterClass
+        )}
       >
-        <div className={clsx([props.rankInnerClass, "pl-3"])}>{props.rank}</div>
+        <div className={clsx(props.rankInnerClass, "pl-3")}>{props.rank}</div>
       </div>
       <div className="flex-shrink-0 flex-grow basis-0">{props.name}</div>
       <div
-        className={clsx([
+        className={clsx(
           "flex-shrink-0 flex-grow basis-0 py-2 group-odd:bg-gradient-to-r",
-          "dark:group-odd:from-dark-outstand dark:group-odd:to-dark-secondary",
-        ])}
+          "dark:group-odd:from-dark-outstand dark:group-odd:to-dark-secondary"
+        )}
       >
         {props.value}
       </div>

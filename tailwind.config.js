@@ -43,6 +43,11 @@ module.exports = {
             "stroke-dashoffset": "-125px",
           },
         },
+        ripple: {
+          "0%": { transform: "scale(0)", opacity: 0 },
+          "50%": { transform: "scale(1)", opacity: 0.3 },
+          "100%": { transform: "scale(1)", opacity: 0 },
+        },
       },
     },
   },

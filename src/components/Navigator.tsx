@@ -5,11 +5,11 @@ import { NavLink, To } from "react-router-dom";
 const Navigator: FC<{ className?: string }> = (props) => {
   return (
     <div
-      className={clsx([
+      className={clsx(
         props.className,
         "backdrop-blur-sm",
-        "dark:bg-dark-deep/90",
-      ])}
+        "dark:bg-dark-deep/90"
+      )}
     >
       <nav className="mx-auto max-w-1920 py-4">
         <NavigatorLink to="/teams">队伍</NavigatorLink>

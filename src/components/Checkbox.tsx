@@ -42,7 +42,7 @@ const Checkbox: FC<CheckboxProps> = (props) => {
         </div>
       </div>
 
-      {props.label && <div>{props.label}</div>}
+      {props.label && <div className="select-none">{props.label}</div>}
     </div>
   );
 };

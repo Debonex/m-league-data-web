@@ -10,7 +10,7 @@ type LoadingProps = {
 const Loading: FC<LoadingProps> = (props) => {
   return (
     <span
-      className={clsx(["animate-[delay-in_0.15s_forwards]", props.className])}
+      className={clsx("animate-[delay-in_0.15s_forwards]", props.className)}
     >
       <svg
         className="animate-[spin_1.4s_linear_infinite]"
