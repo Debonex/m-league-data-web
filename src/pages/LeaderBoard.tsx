@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { FC, MouseEventHandler, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api";
 import Button from "../components/Button";
 import Checkbox from "../components/Checkbox";
@@ -216,17 +217,20 @@ const LeaderBoard: FC = () => {
           )}
         >
           <div className={clsx("flex py-2", "dark:text-white/50")}>
-            <div className="w-20 pl-5 md:w-1/5">排名</div>
-            <div className="flex-shrink-0 flex-grow basis-0">姓名</div>
-            <div className="flex-shrink-0 flex-grow basis-0">{rank.label}</div>
+            <div className="w-16 pl-5 md:w-1/5">排名</div>
+            <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
+              姓名
+            </div>
+            <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
+              {rank.label}
+            </div>
           </div>
           <div>
             {list.map((item, idx) => (
               <RankItem
                 key={item.pro_id}
                 rank={idx + 1}
-                name={item.pro_name}
-                value={item.value}
+                item={item}
                 rankInnerClass={clsx({
                   "border-l-2": idx < 3,
                   "border-l-gold": idx === 0,
@@ -277,11 +281,11 @@ const RankableItem: FC<{
 
 const RankItem: FC<{
   rank: number;
-  name: string;
-  value: number | string;
+  item: ProRankItem;
   rankInnerClass: string;
   rankOuterClass: string;
 }> = (props) => {
+  const item = props.item;
   return (
     <div
       className={clsx(
@@ -291,20 +295,29 @@ const RankItem: FC<{
     >
       <div
         className={clsx(
-          "w-20 rounded-l-lg bg-gradient-to-r py-2 md:w-1/5",
+          "w-16 rounded-l-lg bg-gradient-to-r py-2 md:w-1/5",
           props.rankOuterClass
         )}
       >
         <div className={clsx(props.rankInnerClass, "pl-3")}>{props.rank}</div>
       </div>
-      <div className="flex-shrink-0 flex-grow basis-0">{props.name}</div>
+      <Link
+        to={`/pro?id=${item.pro_id}`}
+        className="flex flex-shrink-0 flex-grow basis-0 items-center text-center md:text-left"
+      >
+        <img
+          src={`https://m-league-data.oss-cn-hangzhou.aliyuncs.com/avatars/${item.pro_id}.png`}
+          className="w-6 rounded-full md:w-8"
+        />
+        <span className="ml-2 md:ml-4">{item.pro_name}</span>
+      </Link>
       <div
         className={clsx(
-          "flex-shrink-0 flex-grow basis-0 py-2 group-odd:bg-gradient-to-r",
+          "flex-shrink-0 flex-grow basis-0 py-2 text-center group-odd:bg-gradient-to-r md:text-left",
           "dark:group-odd:from-dark-outstand dark:group-odd:to-dark-secondary"
         )}
       >
-        {props.value}
+        {item.value}
       </div>
     </div>
   );
