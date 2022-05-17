@@ -23,6 +23,9 @@ module.exports = {
       1920: "1920px",
       1280: "1280px",
     },
+    minWidth: {
+      20: "5rem",
+    },
     extend: {
       strokeWidth: {
         3: "3px",
