@@ -6,9 +6,7 @@ import Button from "../components/Button";
 import Checkbox from "../components/Checkbox";
 import InnerLoading from "../components/InnerLoading";
 import { ReactComponent as FilterSvg } from "../components/svg/Filter.svg";
-
-const percentage = (value: number) => `${(value * 100).toFixed(2)}%`;
-const fixed = (num: number) => (value: number) => `${value.toFixed(num)}`;
+import { fixed, percentage } from "../utils/format";
 
 const ranks: Rankable[] = [
   { key: "point", label: "Point" },

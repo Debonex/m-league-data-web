@@ -1,6 +1,9 @@
 type ProInfo = {
   id: number;
   pro_name: string;
+  birth: string;
+  birth_place: string;
+  pro_year: number;
 };
 
 type ProValue = {
