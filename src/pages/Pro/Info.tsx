@@ -1,4 +1,5 @@
 import { FC, useMemo } from "react";
+import { ossUrl } from "../../utils/constants";
 
 const dateStrToAge = (dateStr: string) => {
   if (!dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
@@ -14,7 +15,7 @@ const useInfo = (info: ProInfo | undefined) => {
   const Info = useMemo(
     () =>
       info && (
-        <div className="flex flex-col-reverse md:flex-row">
+        <div className="relative flex flex-col-reverse md:flex-row">
           <div className="mx-auto flex-grow md:mx-0">
             <div className="mb-4 text-3xl font-bold md:text-5xl">
               {info.pro_name}
@@ -29,9 +30,9 @@ const useInfo = (info: ProInfo | undefined) => {
               value={`${new Date().getFullYear() - info.pro_year} 年`}
             />
           </div>
-          <div className="mb-4 flex flex-grow items-center justify-center md:mb-0 md:justify-start">
+          <div className="mb-4 flex flex-grow items-center justify-center overflow-hidden md:mb-0 md:justify-start">
             <img
-              src={`https://m-league-data.oss-cn-hangzhou.aliyuncs.com/avatars/${info.id}.png`}
+              src={`${ossUrl}/avatars/${info.id}.png`}
               className="rounded-full"
             />
           </div>

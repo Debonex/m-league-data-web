@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import api from "../../api";
 import InnerLoading from "../../components/InnerLoading";
 import useChoseSeasons from "../../hooks/useChoseSeasons";
+import { ossUrl } from "../../utils/constants";
 import { useData } from "./Data";
 import { useInfo } from "./Info";
 
@@ -57,8 +58,16 @@ const Pro: FC = () => {
   }, [chosenSeasons]);
 
   return (
-    <div className="mx-auto max-w-1280">
+    <div className="mx-auto max-w-1280 p-2 md:p-4">
       <Card title="个人信息" className="mt-8" loading={infoLoading}>
+        {info && (
+          <img
+            src={`${ossUrl}/teams/${info.team_id}.${
+              [8, 1].includes(info.team_id) ? "png" : "svg"
+            }`}
+            className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 opacity-10 md:w-1/2"
+          />
+        )}
         {Info}
       </Card>
       <Card title="赛季过滤" className="mt-8" loading={seasonsLoading}>
@@ -94,7 +103,10 @@ const Card: FC<{
       {title}
     </div>
     <div
-      className={clsx("relative rounded-b-lg p-4", "dark:bg-dark-secondary")}
+      className={clsx(
+        "relative overflow-hidden rounded-b-lg p-4",
+        "dark:bg-dark-secondary"
+      )}
     >
       {children}
       {loading && <InnerLoading />}

@@ -5,6 +5,7 @@ import api from "../api";
 import InnerLoading from "../components/InnerLoading";
 import { ReactComponent as FilterSvg } from "../components/svg/Filter.svg";
 import useChoseSeasons from "../hooks/useChoseSeasons";
+import { ossUrl } from "../utils/constants";
 import { fixed, percentage } from "../utils/format";
 
 const ranks: Rankable[] = [
@@ -35,6 +36,7 @@ const ranks: Rankable[] = [
 
 type ProRankItem = {
   pro_id: number;
+  team_id: number;
   pro_name: string;
   value: number | string;
 };
@@ -240,7 +242,7 @@ const RankItem: FC<{
   return (
     <div
       className={clsx(
-        "group mt-1 flex items-center rounded-l-lg",
+        "group relative mt-1 flex items-center overflow-hidden rounded-l-lg",
         "dark:odd:bg-dark-outstand"
       )}
     >
@@ -254,13 +256,19 @@ const RankItem: FC<{
       </div>
       <Link
         to={`/pro?id=${item.pro_id}`}
-        className="flex flex-shrink-0 flex-grow basis-0 items-center text-center md:text-left"
+        className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left"
       >
         <img
-          src={`https://m-league-data.oss-cn-hangzhou.aliyuncs.com/avatars/${item.pro_id}.png`}
-          className="w-6 rounded-full md:w-8"
+          src={`${ossUrl}/avatars/${item.pro_id}.png`}
+          className="z-10 w-6 rounded-full md:w-8"
         />
-        <span className="ml-2 md:ml-4">{item.pro_name}</span>
+        <span className="z-10 ml-2 md:ml-4">{item.pro_name}</span>
+        <img
+          src={`${ossUrl}/teams/${item.team_id}.${
+            [8, 1].includes(item.team_id) ? "png" : "svg"
+          }`}
+          className="absolute top-1/2 left-1/2  w-20 -translate-x-1/2 -translate-y-1/2 opacity-10"
+        />
       </Link>
       <div
         className={clsx(

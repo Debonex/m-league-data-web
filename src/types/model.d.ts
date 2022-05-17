@@ -1,6 +1,7 @@
 type ProInfo = {
   id: number;
   pro_name: string;
+  team_id: number;
   birth: string;
   birth_place: string;
   pro_year: number;
@@ -9,6 +10,7 @@ type ProInfo = {
 type ProValue = {
   pro_id: number;
   pro_name: string;
+  team_id: number;
   value: number;
 };
 
