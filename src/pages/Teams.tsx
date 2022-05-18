@@ -26,7 +26,7 @@ const Teams: FC = () => {
   return (
     <div
       className={clsx(
-        "relative m-2 mx-auto grid max-w-1280 grid-cols-1 gap-4 rounded-lg border-2 p-2 md:m-4 md:grid-cols-2 md:p-4",
+        "relative my-2 mx-auto grid max-w-1280 grid-cols-1 gap-4 rounded-lg border-2 p-2 md:my-4 md:grid-cols-2 md:p-4",
         "dark:border-dark-outstand dark:bg-dark-secondary"
       )}
     >
@@ -36,7 +36,7 @@ const Teams: FC = () => {
           key={team.id}
           className={clsx(
             "border p-2",
-            "rounded-md dark:border-dark-outstand dark:bg-dark-secondary/50"
+            "rounded-md dark:border-dark-outstand dark:bg-dark-outstand/50"
           )}
         >
           <div className="text-center text-xl font-semibold">

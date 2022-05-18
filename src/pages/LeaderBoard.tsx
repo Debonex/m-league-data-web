@@ -29,7 +29,7 @@ const ranks: Rankable[] = [
   { key: "ryukyoku_tenpai_rate", label: "流听率", format: percentage },
   { key: "dama_rate", label: "默听率", format: percentage },
   { key: "blown_rate", label: "被炸率", format: percentage },
-  { key: "blown_score", label: "被炸点数", format: fixed(1) },
+  { key: "avg_blown_score", label: "平均被炸点数", format: fixed(1) },
   { key: "richi_first_rate", label: "先制立直率", format: percentage },
   { key: "richi_chase_rate", label: "追立率", format: percentage },
   { key: "richi_chased_rate", label: "被追立率", format: percentage },
