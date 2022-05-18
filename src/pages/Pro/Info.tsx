@@ -1,15 +1,6 @@
 import { FC, useMemo } from "react";
 import { ossUrl } from "../../utils/constants";
-
-const dateStrToAge = (dateStr: string) => {
-  if (!dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
-    return "未公开";
-  }
-  const date = new Date(dateStr);
-  const now = new Date();
-  const age = now.getFullYear() - date.getFullYear();
-  return age;
-};
+import { dateStrToAge } from "../../utils/format";
 
 const useInfo = (info: ProInfo | undefined) => {
   const Info = useMemo(

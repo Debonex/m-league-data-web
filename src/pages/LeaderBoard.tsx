@@ -29,9 +29,17 @@ const ranks: Rankable[] = [
   { key: "ryukyoku_tenpai_rate", label: "流听率", format: percentage },
   { key: "dama_rate", label: "默听率", format: percentage },
   { key: "blown_rate", label: "被炸率", format: percentage },
+  { key: "blown_score", label: "被炸点数", format: fixed(1) },
   { key: "richi_first_rate", label: "先制立直率", format: percentage },
   { key: "richi_chase_rate", label: "追立率", format: percentage },
   { key: "richi_chased_rate", label: "被追立率", format: percentage },
+  { key: "avg_richi_turn", label: "立直巡目", format: fixed(3), asc: true },
+  { key: "richi_agari_rate", label: "立直和率", format: percentage },
+  { key: "richi_houjuu_rate", label: "立直铳率", format: percentage },
+  { key: "avg_richi_agari_score", label: "立直平均打点", format: fixed(2) },
+  { key: "furo_agari_rate", label: "副露和率", format: percentage },
+  { key: "furo_houjuu_rate", label: "副露铳率", format: percentage, asc: true },
+  { key: "avg_furo_agari_score", label: "副露平均打点", format: fixed(2) },
 ];
 
 type ProRankItem = {

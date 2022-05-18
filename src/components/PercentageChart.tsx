@@ -1,11 +1,10 @@
-import { CSSProperties, FC, useEffect, useRef } from "react";
-import { percentage } from "../utils/format";
-
 import {
   TooltipComponentOption,
   PieSeriesOption,
   ComposeOption,
 } from "echarts";
+import { CSSProperties, FC, useEffect, useRef } from "react";
+import { percentage } from "../utils/format";
 
 type PieChartOption = ComposeOption<TooltipComponentOption | PieSeriesOption>;
 

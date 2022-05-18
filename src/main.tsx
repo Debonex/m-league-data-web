@@ -1,9 +1,8 @@
-import { StrictMode } from "react";
+import "@/styles/scrollbar.css";
+import "@/styles/tailwind.css";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import "@/styles/tailwind.css";
-import "@/styles/scrollbar.css";
 
 const rootDom = document.getElementById("root");
 

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 type CheckboxProps = {
   value: any;

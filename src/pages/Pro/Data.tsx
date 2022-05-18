@@ -109,15 +109,15 @@ export const useData = (statistics: Statistics | undefined) => {
               value={percentage(statistics.richi_rate)}
             />
             <DataLine
-              title="立直和了"
+              title="立直和率"
               value={percentage(statistics.richi_agari_rate)}
             />
             <DataLine
-              title="立直放铳"
+              title="立直铳率"
               value={percentage(statistics.richi_houjuu_rate)}
             />
             <DataLine
-              title="立直平打"
+              title="立直打点"
               value={fixed(2)(statistics.avg_richi_agari_score)}
             />
             <DataLine
@@ -144,6 +144,10 @@ export const useData = (statistics: Statistics | undefined) => {
               title="被追率"
               value={percentage(statistics.richi_chased_rate)}
             />
+            <DataLine
+              title="立直时宝牌"
+              value={fixed(3)(statistics.avg_richi_dora)}
+            />
           </div>
 
           <div
@@ -169,7 +173,7 @@ export const useData = (statistics: Statistics | undefined) => {
               value={percentage(statistics.furo_ryukyoku_rate)}
             />
             <DataLine
-              title="副露平打"
+              title="副露打点"
               value={fixed(2)(statistics.avg_furo_agari_score)}
             />
           </div>

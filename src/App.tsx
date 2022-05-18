@@ -1,10 +1,11 @@
+import clsx from "clsx";
 import { FC } from "react";
 import { Routes, Route } from "react-router-dom";
-import LeaderBoard from "./pages/LeaderBoard";
-import Teams from "./pages/Teams";
-import Pro from "./pages/Pro/Pro";
 import Navigator from "./components/Navigator";
-import clsx from "clsx";
+import LeaderBoard from "./pages/LeaderBoard";
+import Pro from "./pages/Pro/Pro";
+import Team from "./pages/Team";
+import Teams from "./pages/Teams";
 
 const App: FC = () => {
   return (
@@ -16,8 +17,9 @@ const App: FC = () => {
     >
       <Navigator className="sticky top-0 z-30" />
       <Routes>
-        <Route path="*" element={<Teams />} />
+        <Route path="*" element={<LeaderBoard />} />
         <Route path="/teams" element={<Teams />} />
+        <Route path="/team" element={<Team />} />
         <Route path="/leader-board" element={<LeaderBoard />} />
         <Route path="/pro" element={<Pro />} />
       </Routes>

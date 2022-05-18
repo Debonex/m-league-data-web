@@ -14,6 +14,11 @@ type ProValue = {
   value: number;
 };
 
+type TeamInfo = {
+  id: number;
+  team_name: string;
+};
+
 type SeasonInfo = {
   id: number;
   season_year_id: number;
