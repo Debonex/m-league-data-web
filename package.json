@@ -9,6 +9,7 @@
     "build:css": "tailwindcss -o src/styles/tailwind.css",
     "prebuild": "tailwindcss -o src/styles/tailwind.css",
     "build": "vite build",
+    "preview": "vite preview",
     "preci": "rm -fr node_modules",
     "ci": "yarn install --frozen-lockfile"
   },
