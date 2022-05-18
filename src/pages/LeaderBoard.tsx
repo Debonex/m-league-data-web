@@ -1,14 +1,12 @@
 import clsx from "clsx";
-import { FC, MouseEventHandler, useEffect, useState } from "react";
+import { FC, MouseEventHandler, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
-import Button from "../components/Button";
-import Checkbox from "../components/Checkbox";
 import InnerLoading from "../components/InnerLoading";
 import { ReactComponent as FilterSvg } from "../components/svg/Filter.svg";
-
-const percentage = (value: number) => `${(value * 100).toFixed(2)}%`;
-const fixed = (num: number) => (value: number) => `${value.toFixed(num)}`;
+import useChoseSeasons from "../hooks/useChoseSeasons";
+import { ossUrl } from "../utils/constants";
+import { fixed, percentage } from "../utils/format";
 
 const ranks: Rankable[] = [
   { key: "point", label: "Point" },
@@ -38,6 +36,7 @@ const ranks: Rankable[] = [
 
 type ProRankItem = {
   pro_id: number;
+  team_id: number;
   pro_name: string;
   value: number | string;
 };
@@ -46,19 +45,22 @@ const LeaderBoard: FC = () => {
   // current rankable item
   const [rank, setRank] = useState<Rankable>({ key: "point", label: "Point" });
   const [list, setList] = useState<ProRankItem[]>([]);
-  const [seasons, setSeasons] = useState<SeasonInfo[]>([]);
-  const [chosenSeasons, setChosenSeasons] = useState<number[]>([]);
-  const [seasonYears, setSeasonYears] = useState<SeasonYearInfo[]>([]);
   // if mobile rankable items show
   const [rankableShow, setRankableShow] = useState(false);
-  const [filterLoading, setFilterLoading] = useState(true);
   const [listLoading, setListLoading] = useState(false);
+
+  const {
+    chosenSeasons,
+    loading: seasonsLoading,
+    Checkboxes: SeasonCheckboxes,
+    CheckButtons: SeasonCheckButtons,
+  } = useChoseSeasons();
 
   const fetchRank = async () => {
     setListLoading(true);
     const res = await api.post<ProValue[]>("/pro/rank", {
       key: rank.key,
-      ...(seasons.length ? { seasons: chosenSeasons } : {}),
+      ...(seasonsLoading ? {} : { seasons: chosenSeasons }),
     });
     setListLoading(false);
     if (res.status === 200) {
@@ -79,6 +81,22 @@ const LeaderBoard: FC = () => {
     }
   };
 
+  const SeasonFilter = useMemo(
+    () => (
+      <div
+        className={clsx(
+          "relative mb-4 rounded-lg border-2 p-3",
+          "dark:border-dark-outstand dark:bg-dark-secondary"
+        )}
+      >
+        {SeasonCheckboxes}
+        {SeasonCheckButtons}
+        {seasonsLoading && <InnerLoading />}
+      </div>
+    ),
+    [chosenSeasons, seasonsLoading]
+  );
+
   useEffect(() => {
     if (chosenSeasons.length) {
       fetchRank();
@@ -86,32 +104,6 @@ const LeaderBoard: FC = () => {
       setList([]);
     }
   }, [rank, chosenSeasons]);
-
-  useEffect(() => {
-    Promise.all([
-      api.get<SeasonInfo[]>("/season/all"),
-      api.get<SeasonYearInfo[]>("/season_year/all"),
-    ])
-      .then((results) => {
-        setFilterLoading(false);
-        if (results[0].status === 200 && results[1].status === 200) {
-          setSeasons(results[0].data);
-          setChosenSeasons(results[0].data.map((item) => item.id));
-          setSeasonYears(results[1].data);
-        }
-      })
-      .catch(() => {
-        setFilterLoading(false);
-      });
-  }, []);
-
-  const handleSeasonChange = (targetId: number, checked: boolean) => {
-    if (checked) {
-      setChosenSeasons([...chosenSeasons, targetId]);
-    } else {
-      setChosenSeasons(chosenSeasons.filter((id) => id !== targetId));
-    }
-  };
 
   return (
     <div className="mx-auto flex max-w-1920 p-4">
@@ -168,46 +160,7 @@ const LeaderBoard: FC = () => {
       </div>
 
       <div className="ml-4 flex-grow">
-        {/* filters */}
-        <div
-          className={clsx(
-            "relative mb-4 rounded-lg border-2 p-3",
-            "dark:border-dark-outstand dark:bg-dark-secondary"
-          )}
-        >
-          {/* seasons */}
-          <div className="flex flex-wrap">
-            {seasons.map((season) => (
-              <Checkbox
-                key={season.id}
-                value={season.id}
-                onChange={(checked) => handleSeasonChange(season.id, checked)}
-                checked={chosenSeasons.includes(season.id)}
-                label={season.season_name.replace("赛季", "")}
-              />
-            ))}
-          </div>
-
-          <div className="flex">
-            <Button
-              onClick={() => {
-                setChosenSeasons(seasons.map((season) => season.id));
-              }}
-              className="mr-2"
-            >
-              全选
-            </Button>
-
-            <Button
-              onClick={() => {
-                setChosenSeasons([]);
-              }}
-            >
-              清空
-            </Button>
-          </div>
-          {filterLoading && <InnerLoading />}
-        </div>
+        {SeasonFilter}
 
         {/* rank items */}
         <div
@@ -289,7 +242,7 @@ const RankItem: FC<{
   return (
     <div
       className={clsx(
-        "group mt-1 flex items-center rounded-l-lg",
+        "group relative mt-1 flex items-center overflow-hidden rounded-l-lg",
         "dark:odd:bg-dark-outstand"
       )}
     >
@@ -303,13 +256,19 @@ const RankItem: FC<{
       </div>
       <Link
         to={`/pro?id=${item.pro_id}`}
-        className="flex flex-shrink-0 flex-grow basis-0 items-center text-center md:text-left"
+        className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left"
       >
         <img
-          src={`https://m-league-data.oss-cn-hangzhou.aliyuncs.com/avatars/${item.pro_id}.png`}
-          className="w-6 rounded-full md:w-8"
+          src={`${ossUrl}/avatars/${item.pro_id}.png`}
+          className="z-10 w-6 rounded-full md:w-8"
         />
-        <span className="ml-2 md:ml-4">{item.pro_name}</span>
+        <span className="z-10 ml-2 md:ml-4">{item.pro_name}</span>
+        <img
+          src={`${ossUrl}/teams/${item.team_id}.${
+            [8, 1].includes(item.team_id) ? "png" : "svg"
+          }`}
+          className="absolute top-1/2 left-1/2  w-20 -translate-x-1/2 -translate-y-1/2 opacity-10"
+        />
       </Link>
       <div
         className={clsx(

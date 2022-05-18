@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Routes, Route } from "react-router-dom";
 import LeaderBoard from "./pages/LeaderBoard";
 import Teams from "./pages/Teams";
-import Pro from "./pages/Pro";
+import Pro from "./pages/Pro/Pro";
 import Navigator from "./components/Navigator";
 import clsx from "clsx";
 
