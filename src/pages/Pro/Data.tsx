@@ -198,6 +198,22 @@ export const useData = (statistics: Statistics | undefined) => {
               title="平均被炸点数"
               value={fixed(1)(statistics.avg_blown_score)}
             />
+            <DataLine
+              title="一位平均得点"
+              value={fixed(1)(statistics.avg_first_score)}
+            />
+            <DataLine
+              title="二位平均得点"
+              value={fixed(1)(statistics.avg_second_score)}
+            />
+            <DataLine
+              title="三位平均得点"
+              value={fixed(1)(statistics.avg_third_score)}
+            />
+            <DataLine
+              title="四位平均得点"
+              value={fixed(1)(statistics.avg_fourth_score)}
+            />
           </div>
         </div>
       ),

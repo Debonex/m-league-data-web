@@ -67,6 +67,10 @@ type Statistics = {
   second_rate: number;
   third_rate: number;
   fourth_rate: number;
+  avg_first_score: number;
+  avg_second_score: number;
+  avg_third_score: number;
+  avg_fourth_score: number;
   richi_agari_rate: number;
   richi_houjuu_rate: number;
   richi_tsumo_rate: number;
