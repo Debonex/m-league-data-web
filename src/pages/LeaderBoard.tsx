@@ -5,8 +5,12 @@ import api from "../api";
 import InnerLoading from "../components/InnerLoading";
 import { ReactComponent as FilterSvg } from "../components/svg/Filter.svg";
 import useChoseSeasons from "../hooks/useChoseSeasons";
-import { ossUrl } from "../utils/constants";
-import { fixed, percentage } from "../utils/format";
+import {
+  fixed,
+  percentage,
+  proAvatarUrl,
+  teamAvatarUrl,
+} from "../utils/format";
 
 const ranks: Rankable[] = [
   { key: "point", label: "Point" },
@@ -271,14 +275,12 @@ const RankItem: FC<{
         className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left"
       >
         <img
-          src={`${ossUrl}/avatars/${item.pro_id}.png`}
+          src={proAvatarUrl(item.pro_id)}
           className="z-10 w-6 rounded-full md:w-8"
         />
         <span className="z-10 ml-2 md:ml-4">{item.pro_name}</span>
         <img
-          src={`${ossUrl}/teams/${item.team_id}.${
-            [8, 1].includes(item.team_id) ? "png" : "svg"
-          }`}
+          src={teamAvatarUrl(item.team_id)}
           className="absolute top-1/2 left-1/2  w-20 -translate-x-1/2 -translate-y-1/2 opacity-10"
         />
       </Link>

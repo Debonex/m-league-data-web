@@ -12,3 +12,9 @@
 .dark *::-webkit-scrollbar-thumb:hover {
   background: #2b7fd5;
 }
+
+/* firefox: Gecko */
+.dark * {
+  scrollbar-width: thin;
+  scrollbar-color: #4a6494 #15171f;
+}
