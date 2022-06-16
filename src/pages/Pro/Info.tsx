@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { FC, useMemo } from "react";
 import { dateStrToAge, proAvatarUrl, teamAvatarUrl } from "../../utils/format";
 
-const useInfo = (info: ProInfo | undefined, reverse = false) => {
+const useProInfo = (info: ProInfo | undefined, reverse = false) => {
   const Info = useMemo(
     () =>
       info && (
@@ -61,4 +61,4 @@ const InfoLine: FC<{ title: string; value: string | number }> = ({
   </div>
 );
 
-export { useInfo };
+export { useProInfo };

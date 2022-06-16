@@ -1,10 +1,12 @@
 import clsx from "clsx";
 import { FC, useEffect, useMemo, useState } from "react";
 import api from "../../api";
+import Button from "../../components/Button";
 import InnerLoading from "../../components/InnerLoading";
-import Select, { SelectOption } from "../../components/Select";
+import { SelectOption } from "../../components/Select";
 import useChoseSeasons from "../../hooks/useChoseSeasons";
-import { useInfo } from "../Pro/Info";
+import ProPro from "./ProPro";
+import ProTeam from "./ProTeam";
 
 const History: FC = () => {
   const {
@@ -14,82 +16,40 @@ const History: FC = () => {
     CheckButtons: SeasonCheckButtons,
   } = useChoseSeasons();
 
-  const [options, setOptions] = useState<SelectOption[]>([]);
-  const [proListLoading, setProListLoading] = useState(true);
+  const [options, setOptions] = useState<{
+    pro: SelectOption[];
+    team: SelectOption[];
+  }>({ pro: [], team: [] });
+  const [optionsLoading, setOptionsLoading] = useState(true);
+  const [between, setBetween] = useState<"pro_pro" | "pro_team" | "team_team">(
+    "pro_pro"
+  );
 
-  const [leftInfo, setLeftInfo] = useState<ProInfo>();
-  const [rightInfo, setRightInfo] = useState<ProInfo>();
-  const [proInfoLoading, setProInfoLoading] = useState(false);
-  const [historyLoading, setHistoryLoading] = useState(false);
-  const [history, setHistory] = useState<GameHistory>();
-
-  const handleProChange = (proId: number, isLeft: boolean) => {
-    if (
-      (isLeft && leftInfo?.id === proId) ||
-      (!isLeft && rightInfo?.id === proId)
-    ) {
-      return;
-    }
-    setProInfoLoading(true);
-    api
-      .get<ProInfo>(`/pro/info/${proId}`)
-      .then((res) => {
-        setProInfoLoading(false);
-        if (res.status === 200) {
-          if (isLeft) {
-            setLeftInfo(res.data);
-          } else {
-            setRightInfo(res.data);
-          }
-        }
-      })
-      .catch(() => {
-        setProInfoLoading(false);
-      });
-  };
-
-  // get pro select options
+  // get pro and team options
   useEffect(() => {
-    api
-      .get<ProInfo[]>("/pro/all")
-      .then((res) => {
-        setProListLoading(false);
-        if (res.status === 200) {
-          setOptions(
-            res.data.map((pro) => ({
+    Promise.all([
+      api.get<ProInfo[]>("/pro/all"),
+      api.get<TeamInfo[]>("/team/all"),
+    ])
+      .then((results) => {
+        setOptionsLoading(false);
+        if (results[0].status === 200 && results[1].status === 200) {
+          setOptions({
+            pro: results[0].data.map((pro) => ({
               label: pro.pro_name,
               value: pro.id,
-            }))
-          );
+            })),
+            team: results[1].data.map((team) => ({
+              label: team.team_name,
+              value: team.id,
+            })),
+          });
         }
       })
       .catch(() => {
-        setProListLoading(false);
+        setOptionsLoading(false);
       });
   }, []);
-
-  // when both right pro and left pro are chosen, fetch history
-  useEffect(() => {
-    if (!leftInfo || !rightInfo) {
-      return;
-    }
-    setHistoryLoading(true);
-    api
-      .post<GameHistory>("/game/history/pro_pro", {
-        pro_id: leftInfo.id,
-        pro_id2: rightInfo.id,
-        seasons: chosenSeasons,
-      })
-      .then((res) => {
-        setHistoryLoading(false);
-        if (res.status === 200) {
-          setHistory(res.data);
-        }
-      })
-      .catch(() => {
-        setHistoryLoading(false);
-      });
-  }, [leftInfo, rightInfo, chosenSeasons]);
 
   const SeasonFilter = useMemo(
     () => (
@@ -116,47 +76,50 @@ const History: FC = () => {
           "dark:border-dark-outstand dark:bg-dark-secondary"
         )}
       >
-        <div className="relative z-10 flex items-center">
-          <Select
-            options={options}
-            className="flex-grow basis-0"
-            placeholder="请选择选手"
-            onChange={(proId) => handleProChange(proId, true)}
+        <div className="mb-3 flex">
+          <Button
+            flat
+            outline
+            onClick={() => setBetween("pro_pro")}
+            active={between === "pro_pro"}
+            className="rounded-l-md"
+          >
+            选手间
+          </Button>
+          <Button
+            flat
+            outline
+            onClick={() => setBetween("pro_team")}
+            active={between === "pro_team"}
+          >
+            选手与队伍间
+          </Button>
+          <Button
+            flat
+            outline
+            onClick={() => setBetween("team_team")}
+            active={between === "team_team"}
+            className="rounded-r-md"
+          >
+            队伍间
+          </Button>
+        </div>
+        {between == "pro_pro" && (
+          <ProPro
+            chosenSeasons={chosenSeasons}
+            optionsLoading={optionsLoading}
+            proOptions={options.pro}
           />
-          <div className="mx-2 select-none text-xl font-extrabold text-primary-main md:mx-4">
-            VS
-          </div>
-          <Select
-            options={options}
-            className="flex-grow basis-0"
-            placeholder="请选择选手"
-            onChange={(proId) => handleProChange(proId, false)}
+        )}
+        {between == "pro_team" && (
+          <ProTeam
+            chosenSeasons={chosenSeasons}
+            optionsLoading={optionsLoading}
+            proOptions={options.pro}
+            teamOptions={options.team}
           />
-          {proListLoading && <InnerLoading />}
-        </div>
-
-        <div className="relative mt-3 flex">
-          <div className="flex-grow basis-0">{useInfo(leftInfo)}</div>
-          <div className="flex-grow basis-0">{useInfo(rightInfo, true)}</div>
-          {proInfoLoading && <InnerLoading />}
-        </div>
-
-        <div className="relative mt-3">
-          {history ? history.point : 0.0}
-          {history &&
-            history.games.map((game) => (
-              <div className="flex">
-                <div>{game.season_id}</div>
-                <div>{game.time}</div>
-                {game.pros.map((pro) => (
-                  <div>
-                    {pro.pro_name}:{pro.point}
-                  </div>
-                ))}
-              </div>
-            ))}
-          {historyLoading && <InnerLoading />}
-        </div>
+        )}
+        {between == "team_team" && <div>tt</div>}
       </div>
     </div>
   );

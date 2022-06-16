@@ -96,6 +96,7 @@ type GameHistory = {
 type Game = {
   id: number;
   season_id: number;
+  season_name: string;
   time: string;
   pros: GamePro[];
 };

@@ -6,7 +6,7 @@ import InnerLoading from "../../components/InnerLoading";
 import useChoseSeasons from "../../hooks/useChoseSeasons";
 import { teamAvatarUrl } from "../../utils/format";
 import { useData } from "./Data";
-import { useInfo } from "./Info";
+import { useProInfo } from "./Info";
 
 const Pro: FC = () => {
   const [params] = useSearchParams();
@@ -22,7 +22,7 @@ const Pro: FC = () => {
     Checkboxes,
   } = useChoseSeasons();
 
-  const Info = useInfo(info);
+  const Info = useProInfo(info);
   const Data = useData(statistics);
 
   useEffect(() => {
