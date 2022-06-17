@@ -2,32 +2,29 @@ import { FC, useEffect, useState } from "react";
 import api from "../../api";
 import InnerLoading from "../../components/InnerLoading";
 import Select, { SelectOption } from "../../components/Select";
-import { useProInfo } from "../Pro/Info";
 import { useHistoryTable } from "./HistoryTable";
 import useTeamInfo from "./TeamInfo";
 
-const ProTeam: FC<{
+const TeamTeam: FC<{
   chosenSeasons: number[];
-  proOptions: SelectOption[];
   teamOptions: SelectOption[];
   optionsLoading: boolean;
-}> = ({ chosenSeasons, proOptions, teamOptions, optionsLoading }) => {
-  const [proInfo, setProInfo] = useState<ProInfo>();
-  const [teamInfo, setTeamInfo] = useState<TeamInfo>();
+}> = ({ chosenSeasons, teamOptions, optionsLoading }) => {
+  const [leftInfo, setLeftInfo] = useState<TeamInfo>();
+  const [rightInfo, setRightInfo] = useState<TeamInfo>();
   const [infoLoading, setInfoLoading] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [history, setHistory] = useState<GameHistory>();
 
-  // when both pro and team are chosen, fetch history
   useEffect(() => {
-    if (!proInfo || !teamInfo) {
+    if (!leftInfo || !rightInfo) {
       return;
     }
     setHistoryLoading(true);
     api
-      .post<GameHistory>("/game/history/pro_team", {
-        pro_id: proInfo.id,
-        team_id: teamInfo.id,
+      .post<GameHistory>("/game/history/team_team", {
+        team_id: leftInfo.id,
+        team_id2: rightInfo.id,
         seasons: chosenSeasons,
       })
       .then((res) => {
@@ -39,31 +36,26 @@ const ProTeam: FC<{
       .catch(() => {
         setHistoryLoading(false);
       });
-  }, [proInfo, teamInfo, chosenSeasons]);
+  }, [leftInfo, rightInfo, chosenSeasons]);
 
-  const handleProChange = (proId: number) => {
-    setInfoLoading(true);
-    api
-      .get<ProInfo>(`/pro/info/${proId}`)
-      .then((res) => {
-        setInfoLoading(false);
-        if (res.status === 200) {
-          setProInfo(res.data);
-        }
-      })
-      .catch(() => {
-        setInfoLoading(false);
-      });
-  };
-
-  const handleTeamChange = (teamId: number) => {
+  const handleTeamChange = (teamId: number, isLeft: boolean) => {
+    if (
+      (isLeft && leftInfo?.id === teamId) ||
+      (!isLeft && rightInfo?.id === teamId)
+    ) {
+      return;
+    }
     setInfoLoading(true);
     api
       .get<TeamInfo>(`/team/info/${teamId}`)
       .then((res) => {
         setInfoLoading(false);
         if (res.status === 200) {
-          setTeamInfo(res.data);
+          if (isLeft) {
+            setLeftInfo(res.data);
+          } else {
+            setRightInfo(res.data);
+          }
         }
       })
       .catch(() => {
@@ -75,10 +67,10 @@ const ProTeam: FC<{
     <div>
       <div className="relative z-10 flex items-center">
         <Select
-          options={proOptions}
+          options={teamOptions}
           className="flex-grow basis-0"
-          placeholder="请选择选手"
-          onChange={(proId) => handleProChange(proId)}
+          placeholder="请选择队伍"
+          onChange={(teamId) => handleTeamChange(teamId, true)}
         />
         <div className="mx-2 select-none text-xl font-extrabold text-primary-main md:mx-4">
           VS
@@ -87,27 +79,27 @@ const ProTeam: FC<{
           options={teamOptions}
           className="flex-grow basis-0"
           placeholder="请选择队伍"
-          onChange={(teamId) => handleTeamChange(teamId)}
+          onChange={(teamId) => handleTeamChange(teamId, false)}
         />
         {optionsLoading && <InnerLoading />}
       </div>
 
       <div className="relative mt-3 flex flex-wrap">
         <div className="w-full flex-grow-0 basis-auto md:w-1/2">
-          {useProInfo(proInfo)}
+          {useTeamInfo(leftInfo)}
         </div>
-        <div className="mt-3 w-full flex-grow-0 basis-auto md:mt-0 md:w-1/2">
-          {useTeamInfo(teamInfo)}
+        <div className="w-full flex-grow-0 basis-auto md:w-1/2">
+          {useTeamInfo(rightInfo)}
         </div>
         {infoLoading && <InnerLoading />}
       </div>
 
       <div className="relative mt-3">
-        {useHistoryTable(history, proInfo, teamInfo)}
+        {useHistoryTable(history, leftInfo, rightInfo)}
         {historyLoading && <InnerLoading />}
       </div>
     </div>
   );
 };
 
-export default ProTeam;
+export default TeamTeam;

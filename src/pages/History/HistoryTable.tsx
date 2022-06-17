@@ -5,16 +5,16 @@ import { formatPoint } from "../../utils/format";
 
 const useHistoryTable = (
   history?: GameHistory,
-  leftInfo?: ProInfo,
-  rightInfo?: ProInfo
+  leftInfo?: ProInfo | TeamInfo,
+  rightInfo?: ProInfo | TeamInfo
 ) => {
   const HistoryTable = useMemo(() => {
     let [winWidth, loseWidth] = ["0%", "0%"];
     if (leftInfo && rightInfo && history) {
       const [winCount, drawCount, loseCount] = vsCount(
         history.games,
-        leftInfo.id,
-        rightInfo.id
+        leftInfo,
+        rightInfo
       );
       let total = winCount + drawCount + loseCount;
       if (total !== 0) {
@@ -32,7 +32,12 @@ const useHistoryTable = (
             className="rounded-l-md bg-primary-main transition-all duration-500"
             style={{ width: winWidth }}
           />
-          <div className="flex-grow bg-silver transition-all duration-500" />
+          <div
+            className={clsx("flex-grow bg-silver transition-all duration-500", {
+              "rounded-l-md": winWidth === "0%",
+              "rounded-r-md": loseWidth === "0%",
+            })}
+          />
           <div
             className="rounded-r-md bg-secondary-main transition-all duration-500"
             style={{ width: loseWidth }}
@@ -56,7 +61,7 @@ const useHistoryTable = (
           </div>
           {history &&
             history.games.map((game) => {
-              const gameResult = vsCount([game], leftInfo?.id, rightInfo?.id);
+              const gameResult = vsCount([game], leftInfo, rightInfo);
               return (
                 <div
                   className={clsx("mt-0.5 flex py-0.5", {
@@ -72,22 +77,27 @@ const useHistoryTable = (
                   <div className="flex-grow basis-0 text-center">
                     {game.time.substring(0, 10)}
                   </div>
-                  {game.pros.map((pro, idx) => (
-                    <Link
-                      to={`/pro?id=${pro.id}`}
-                      className={clsx("flex-grow basis-0 text-center", {
-                        "font-bold":
-                          pro.id === leftInfo?.id || pro.id === rightInfo?.id,
-                        "dark:text-white/50":
-                          pro.id !== leftInfo?.id && pro.id !== rightInfo?.id,
-                        "text-primary-main": pro.id === leftInfo?.id,
-                        "text-secondary-main": pro.id === rightInfo?.id,
-                      })}
-                      key={idx}
-                    >
-                      {`${pro.pro_name} ${formatPoint(pro.point)}`}
-                    </Link>
-                  ))}
+                  {game.pros.map((pro, idx) => {
+                    const leftMatch = sameId(pro, leftInfo);
+                    const rightMatch = sameId(pro, rightInfo);
+                    return (
+                      <Link
+                        to={`/pro?id=${pro.id}`}
+                        className={clsx(
+                          "flex-grow basis-0 text-center transition-colors dark:hover:text-white",
+                          {
+                            "font-bold": leftMatch || rightMatch,
+                            "dark:text-white/50": !leftMatch && !rightMatch,
+                            "text-primary-main": leftMatch,
+                            "text-secondary-main": rightMatch,
+                          }
+                        )}
+                        key={idx}
+                      >
+                        {`${pro.pro_name} ${formatPoint(pro.point)}`}
+                      </Link>
+                    );
+                  })}
                 </div>
               );
             })}
@@ -97,7 +107,7 @@ const useHistoryTable = (
         <div className="mt-3 grid grid-cols-1 gap-2 md:hidden">
           {history &&
             history.games.map((game) => {
-              const gameResult = vsCount([game], leftInfo?.id, rightInfo?.id);
+              const gameResult = vsCount([game], leftInfo, rightInfo);
               return (
                 <div
                   className={clsx("rounded-md p-3 text-sm", {
@@ -114,22 +124,27 @@ const useHistoryTable = (
                     日期：{game.time.substring(0, 10)}
                   </div>
                   <div className="flex flex-wrap">
-                    {game.pros.map((pro, idx) => (
-                      <Link
-                        to={`/pro?id=${pro.id}`}
-                        className={clsx("w-1/2 flex-grow-0 basis-auto", {
-                          "font-bold":
-                            pro.id === leftInfo?.id || pro.id === rightInfo?.id,
-                          "dark:text-white/50":
-                            pro.id !== leftInfo?.id && pro.id !== rightInfo?.id,
-                          "text-primary-main": pro.id === leftInfo?.id,
-                          "text-secondary-main": pro.id === rightInfo?.id,
-                        })}
-                        key={idx}
-                      >
-                        {`${pro.pro_name} ${formatPoint(pro.point)}`}
-                      </Link>
-                    ))}
+                    {game.pros.map((pro, idx) => {
+                      const leftMatch = sameId(pro, leftInfo);
+                      const rightMatch = sameId(pro, rightInfo);
+                      return (
+                        <Link
+                          to={`/pro?id=${pro.id}`}
+                          className={clsx(
+                            "w-1/2 flex-grow-0 basis-auto transition-colors dark:hover:text-white",
+                            {
+                              "font-bold": leftMatch || rightMatch,
+                              "dark:text-white/50": !leftMatch && !rightMatch,
+                              "text-primary-main": leftMatch,
+                              "text-secondary-main": rightMatch,
+                            }
+                          )}
+                          key={idx}
+                        >
+                          {`${pro.pro_name} ${formatPoint(pro.point)}`}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               );
@@ -142,16 +157,20 @@ const useHistoryTable = (
   return HistoryTable;
 };
 
-const vsCount = (games: Game[], proId?: number, proId2?: number) => {
-  if (!proId || !proId2) {
+const vsCount = (
+  games: Game[],
+  leftInfo?: ProInfo | TeamInfo,
+  rightInfo?: ProInfo | TeamInfo
+) => {
+  if (!leftInfo || !rightInfo) {
     return [0, 0, 0];
   }
   let winCount = 0;
   let drawCount = 0;
   let loseCount = 0;
   games.forEach((game) => {
-    const pro = game.pros.find((pro) => pro.id === proId);
-    const pro2 = game.pros.find((pro) => pro.id === proId2);
+    const pro = game.pros.find((pro) => sameId(pro, leftInfo));
+    const pro2 = game.pros.find((pro) => sameId(pro, rightInfo));
     if (pro && pro2) {
       if (pro.point > pro2.point) {
         winCount++;
@@ -163,6 +182,13 @@ const vsCount = (games: Game[], proId?: number, proId2?: number) => {
     }
   });
   return [winCount, drawCount, loseCount];
+};
+
+const sameId = (pro: GamePro, info?: ProInfo | TeamInfo) => {
+  if (!info) {
+    return false;
+  }
+  return pro["team_name" in info ? "team_id" : "id"] === info.id;
 };
 
 export { useHistoryTable };

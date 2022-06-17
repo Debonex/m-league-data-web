@@ -7,6 +7,7 @@ import { SelectOption } from "../../components/Select";
 import useChoseSeasons from "../../hooks/useChoseSeasons";
 import ProPro from "./ProPro";
 import ProTeam from "./ProTeam";
+import TeamTeam from "./TeamTeam";
 
 const History: FC = () => {
   const {
@@ -119,7 +120,13 @@ const History: FC = () => {
             teamOptions={options.team}
           />
         )}
-        {between == "team_team" && <div>tt</div>}
+        {between == "team_team" && (
+          <TeamTeam
+            chosenSeasons={chosenSeasons}
+            optionsLoading={optionsLoading}
+            teamOptions={options.team}
+          />
+        )}
       </div>
     </div>
   );
