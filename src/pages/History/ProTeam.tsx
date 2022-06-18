@@ -42,6 +42,9 @@ const ProTeam: FC<{
   }, [proInfo, teamInfo, chosenSeasons]);
 
   const handleProChange = (proId: number) => {
+    if (proId === proInfo?.id) {
+      return;
+    }
     setInfoLoading(true);
     api
       .get<ProInfo>(`/pro/info/${proId}`)
@@ -57,6 +60,9 @@ const ProTeam: FC<{
   };
 
   const handleTeamChange = (teamId: number) => {
+    if (teamId === teamInfo?.id) {
+      return;
+    }
     setInfoLoading(true);
     api
       .get<TeamInfo>(`/team/info/${teamId}`)

@@ -73,38 +73,44 @@ const History: FC = () => {
       {SeasonFilter}
       <div
         className={clsx(
+          "mb-4 flex rounded-lg border-2 p-3",
+          "dark:border-dark-outstand dark:bg-dark-secondary"
+        )}
+      >
+        <Button
+          flat
+          outline
+          onClick={() => setBetween("pro_pro")}
+          active={between === "pro_pro"}
+          className="rounded-l-md"
+        >
+          选手间
+        </Button>
+        <Button
+          flat
+          outline
+          onClick={() => setBetween("pro_team")}
+          active={between === "pro_team"}
+        >
+          选手与队伍间
+        </Button>
+        <Button
+          flat
+          outline
+          onClick={() => setBetween("team_team")}
+          active={between === "team_team"}
+          className="rounded-r-md"
+        >
+          队伍间
+        </Button>
+      </div>
+
+      <div
+        className={clsx(
           "rounded-lg border-2 p-3",
           "dark:border-dark-outstand dark:bg-dark-secondary"
         )}
       >
-        <div className="mb-3 flex">
-          <Button
-            flat
-            outline
-            onClick={() => setBetween("pro_pro")}
-            active={between === "pro_pro"}
-            className="rounded-l-md"
-          >
-            选手间
-          </Button>
-          <Button
-            flat
-            outline
-            onClick={() => setBetween("pro_team")}
-            active={between === "pro_team"}
-          >
-            选手与队伍间
-          </Button>
-          <Button
-            flat
-            outline
-            onClick={() => setBetween("team_team")}
-            active={between === "team_team"}
-            className="rounded-r-md"
-          >
-            队伍间
-          </Button>
-        </div>
         {between == "pro_pro" && (
           <ProPro
             chosenSeasons={chosenSeasons}

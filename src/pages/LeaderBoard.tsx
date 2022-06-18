@@ -80,8 +80,8 @@ const LeaderBoard: FC = () => {
     });
     setListLoading(false);
     if (res.status === 200) {
-      if (!rank.asc) {
-        res.data.sort((a, b) => b.value - a.value);
+      if (rank.asc) {
+        res.data.sort((a, b) => a.value - b.value);
       }
       if (rank.format) {
         const format = rank.format;
@@ -256,10 +256,11 @@ const RankItem: FC<{
 }> = (props) => {
   const item = props.item;
   return (
-    <div
+    <Link
+      to={`/pro?id=${item.pro_id}`}
       className={clsx(
-        "group relative mt-1 flex items-center overflow-hidden rounded-l-lg",
-        "dark:odd:bg-dark-outstand"
+        "group relative mt-1 flex items-center overflow-hidden rounded-l-lg transition-colors",
+        "dark:odd:bg-dark-outstand dark:hover:text-white/50"
       )}
     >
       <div
@@ -270,20 +271,17 @@ const RankItem: FC<{
       >
         <div className={clsx(props.rankInnerClass, "pl-3")}>{props.rank}</div>
       </div>
-      <Link
-        to={`/pro?id=${item.pro_id}`}
-        className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left"
-      >
+      <div className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left">
         <img
           src={proAvatarUrl(item.pro_id)}
           className="z-10 w-6 rounded-full md:w-8"
         />
-        <span className="z-10 ml-2 md:ml-4">{item.pro_name}</span>
+        <span className="z-10 ml-2  md:ml-4">{item.pro_name}</span>
         <img
           src={teamAvatarUrl(item.team_id)}
           className="absolute top-1/2 left-1/2  w-20 -translate-x-1/2 -translate-y-1/2 opacity-10"
         />
-      </Link>
+      </div>
       <div
         className={clsx(
           "flex-shrink-0 flex-grow basis-0 py-2 text-center group-odd:bg-gradient-to-r md:text-left",
@@ -292,7 +290,7 @@ const RankItem: FC<{
       >
         {item.value}
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -88,7 +88,7 @@ const TeamTeam: FC<{
         <div className="w-full flex-grow-0 basis-auto md:w-1/2">
           {useTeamInfo(leftInfo)}
         </div>
-        <div className="w-full flex-grow-0 basis-auto md:w-1/2">
+        <div className="mt-3 w-full flex-grow-0 basis-auto md:mt-0 md:w-1/2">
           {useTeamInfo(rightInfo)}
         </div>
         {infoLoading && <InnerLoading />}

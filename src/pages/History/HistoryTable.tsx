@@ -27,7 +27,7 @@ const useHistoryTable = (
         <div className="text-center text-xl font-bold">
           {formatPoint(history ? history.point : 0.0)}
         </div>
-        <div className="mt-3 flex h-4 w-full">
+        <div className="mt-3 flex h-2 w-full">
           <div
             className="rounded-l-md bg-primary-main transition-all duration-500"
             style={{ width: winWidth }}
@@ -48,7 +48,7 @@ const useHistoryTable = (
         <div className="mt-3 hidden md:block">
           <div
             className={clsx(
-              "flex py-0.5 font-bold",
+              "flex rounded-lg py-0.5 font-bold",
               "dark:bg-dark-outstand/75"
             )}
           >
@@ -64,11 +64,14 @@ const useHistoryTable = (
               const gameResult = vsCount([game], leftInfo, rightInfo);
               return (
                 <div
-                  className={clsx("mt-0.5 flex py-0.5", {
-                    "bg-primary-main/10": gameResult[0],
-                    "bg-silver/10": gameResult[1],
-                    "bg-secondary-main/10": gameResult[2],
-                  })}
+                  className={clsx(
+                    "mt-1 flex rounded-l-lg bg-gradient-to-r py-0.5 dark:to-dark-secondary",
+                    {
+                      "from-primary-main/10": gameResult[0],
+                      "from-silver/10": gameResult[1],
+                      "from-secondary-main/10": gameResult[2],
+                    }
+                  )}
                   key={game.id}
                 >
                   <div className="flex-grow basis-0 text-center">

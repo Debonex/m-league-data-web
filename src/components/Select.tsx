@@ -21,7 +21,7 @@ type SelectProps = {
 };
 
 const Select: FC<SelectProps> = (props) => {
-  const [current, setCurrent] = useState<SelectOption>(props.options[0]);
+  const [current, setCurrent] = useState<SelectOption>();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleClickOutside = useCallback(() => {
