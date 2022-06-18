@@ -87,3 +87,23 @@ type Statistics = {
   lowest_score: number;
   renchan_max_num: number;
 };
+
+type GameHistory = {
+  point: number;
+  games: Game[];
+};
+
+type Game = {
+  id: number;
+  season_id: number;
+  season_name: string;
+  time: string;
+  pros: GamePro[];
+};
+
+type GamePro = {
+  id: number;
+  pro_name: string;
+  team_id: number;
+  point: number;
+};

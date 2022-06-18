@@ -15,6 +15,7 @@ const Navigator: FC<{ className?: string }> = (props) => {
       <nav className="mx-auto flex max-w-1920 items-center py-4">
         <NavigatorLink to="/teams">队伍</NavigatorLink>
         <NavigatorLink to="/leader-board">排名</NavigatorLink>
+        <NavigatorLink to="/history">对战记录</NavigatorLink>
 
         <GithubSvg
           className={clsx(

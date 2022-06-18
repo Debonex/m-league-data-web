@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
 import InnerLoading from "../components/InnerLoading";
-import { ossUrl } from "../utils/constants";
+import { teamAvatarUrl } from "../utils/format";
 
 const Teams: FC = () => {
   const [teams, setTeams] = useState<TeamInfo[]>([]);
@@ -43,9 +43,7 @@ const Teams: FC = () => {
             {team.team_name}
           </div>
           <img
-            src={`${ossUrl}/teams/${team.id}.${
-              [1, 8].includes(team.id) ? "png" : "svg"
-            }`}
+            src={teamAvatarUrl(team.id)}
             className={clsx("mx-auto mt-2 h-40 w-40", {
               "py-2": team.id == 1,
               "p-2.5": team.id == 3,

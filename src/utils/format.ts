@@ -1,3 +1,5 @@
+import { ossUrl } from "./constants";
+
 export const percentage = (value: number) => `${(value * 100).toFixed(2)}%`;
 export const fixed = (num: number) => (value: number) =>
   `${value.toFixed(num)}`;
@@ -10,4 +12,17 @@ export const dateStrToAge = (dateStr: string) => {
   const now = new Date();
   const age = now.getFullYear() - date.getFullYear();
   return age;
+};
+
+export const proAvatarUrl = (proId: number) => `${ossUrl}/avatars/${proId}.png`;
+
+export const teamAvatarUrl = (teamId: number) =>
+  `${ossUrl}/teams/${teamId}.${[8, 1].includes(teamId) ? "png" : "svg"}`;
+
+export const formatPoint = (point: number) => {
+  if (point < 0) {
+    return `▲${-point}pt`;
+  } else {
+    return `${point}pt`;
+  }
 };

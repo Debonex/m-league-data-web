@@ -1,6 +1,11 @@
+import clsx from "clsx";
 import { MouseEventHandler, ReactElement, useState } from "react";
 
-const useRipples: () => [MouseEventHandler, ReactElement[]] = () => {
+type RippleColor = "primary" | "translucent";
+
+const useRipples: (
+  color: RippleColor
+) => [MouseEventHandler, ReactElement[]] = (color = "primary") => {
   const [ripples, setRipples] = useState<ReactElement[]>([]);
 
   const removeRippleByKey = (key: number) => {
@@ -8,7 +13,6 @@ const useRipples: () => [MouseEventHandler, ReactElement[]] = () => {
   };
 
   const addRipple: MouseEventHandler = (e) => {
-    console.log(e, e.currentTarget);
     const { left, top, height, width } =
       e.currentTarget.getBoundingClientRect();
     const radius = height + width;
@@ -22,7 +26,13 @@ const useRipples: () => [MouseEventHandler, ReactElement[]] = () => {
           left: e.clientX - left - radius,
           top: e.clientY - top - radius,
         }}
-        className="absolute animate-[ripple_800ms_ease-in_forwards] rounded-full bg-primary-main"
+        className={clsx(
+          "absolute animate-[ripple_800ms_ease-in_forwards] rounded-full",
+          {
+            "bg-primary-main": color === "primary",
+            "bg-white/75": color === "translucent",
+          }
+        )}
         onAnimationEnd={() => removeRippleByKey(e.timeStamp)}
       />
     );

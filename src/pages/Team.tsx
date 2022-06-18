@@ -3,8 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import api from "../api";
 import InnerLoading from "../components/InnerLoading";
-import { ossUrl } from "../utils/constants";
-import { dateStrToAge } from "../utils/format";
+import { dateStrToAge, proAvatarUrl } from "../utils/format";
 
 const Team: FC = () => {
   const [params] = useSearchParams();
@@ -39,10 +38,7 @@ const Team: FC = () => {
           key={pro.id}
           className="mx-auto mt-12 flex w-full flex-grow-0 p-2 md:w-1/2"
         >
-          <img
-            src={`${ossUrl}/avatars/${pro.id}.png`}
-            className="rounded-full"
-          />
+          <img src={proAvatarUrl(pro.id)} className="rounded-full" />
           <div className="ml-4 flex flex-col justify-center">
             <div className="text-xl font-semibold">{pro.pro_name}</div>
             <div className="mt-4 md:flex">

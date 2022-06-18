@@ -17,11 +17,15 @@ module.exports = {
         main: "#2b7fd5",
         outstand: "#4a6494",
       },
+      secondary: {
+        main: "#14b8a6",
+      },
       current: "currentColor",
     },
     maxWidth: {
       1920: "1920px",
       1280: "1280px",
+      40: "10rem",
     },
     minWidth: {
       20: "5rem",

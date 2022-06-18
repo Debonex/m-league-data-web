@@ -4,9 +4,9 @@ import { useSearchParams } from "react-router-dom";
 import api from "../../api";
 import InnerLoading from "../../components/InnerLoading";
 import useChoseSeasons from "../../hooks/useChoseSeasons";
-import { ossUrl } from "../../utils/constants";
+import { teamAvatarUrl } from "../../utils/format";
 import { useData } from "./Data";
-import { useInfo } from "./Info";
+import { useProInfo } from "./Info";
 
 const Pro: FC = () => {
   const [params] = useSearchParams();
@@ -22,7 +22,7 @@ const Pro: FC = () => {
     Checkboxes,
   } = useChoseSeasons();
 
-  const Info = useInfo(info);
+  const Info = useProInfo(info);
   const Data = useData(statistics);
 
   useEffect(() => {
@@ -60,21 +60,23 @@ const Pro: FC = () => {
   return (
     <div className="mx-auto max-w-1280 p-2 md:p-4">
       <Card title="个人信息" className="mt-8" loading={infoLoading}>
-        {info && (
-          <img
-            src={`${ossUrl}/teams/${info.team_id}.${
-              [8, 1].includes(info.team_id) ? "png" : "svg"
-            }`}
-            className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 opacity-10 md:w-1/2"
-          />
-        )}
         {Info}
       </Card>
-      <Card title="赛季过滤" className="mt-8" loading={seasonsLoading}>
+      <Card
+        title="赛季过滤"
+        className="mt-8"
+        loading={seasonsLoading}
+        containerClassName="p-4"
+      >
         {Checkboxes}
         {CheckButtons}
       </Card>
-      <Card title="统计信息" className="my-8" loading={statisticsLoading}>
+      <Card
+        title="统计信息"
+        className="my-8"
+        loading={statisticsLoading}
+        containerClassName="p-4"
+      >
         {Data}
       </Card>
     </div>
@@ -85,8 +87,9 @@ const Card: FC<{
   title: string;
   children: ReactNode;
   className?: string;
+  containerClassName?: string;
   loading: boolean;
-}> = ({ title, children, className, loading }) => (
+}> = ({ title, children, className, containerClassName, loading }) => (
   <div
     className={clsx(
       "rounded-lg border-2",
@@ -104,8 +107,9 @@ const Card: FC<{
     </div>
     <div
       className={clsx(
-        "relative overflow-hidden rounded-b-lg p-4",
-        "dark:bg-dark-secondary"
+        "relative rounded-b-lg",
+        "dark:bg-dark-secondary",
+        containerClassName
       )}
     >
       {children}

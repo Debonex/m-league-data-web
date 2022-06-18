@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { FC } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navigator from "./components/Navigator";
+import History from "./pages/History/History";
 import LeaderBoard from "./pages/LeaderBoard";
 import Pro from "./pages/Pro/Pro";
 import Team from "./pages/Team";
@@ -21,6 +22,7 @@ const App: FC = () => {
         <Route path="/teams" element={<Teams />} />
         <Route path="/team" element={<Team />} />
         <Route path="/leader-board" element={<LeaderBoard />} />
+        <Route path="/history" element={<History />} />
         <Route path="/pro" element={<Pro />} />
       </Routes>
     </div>
