@@ -3,6 +3,7 @@ import {
   PieSeriesOption,
   ComposeOption,
 } from "echarts";
+import { ECharts } from "echarts/types/dist/core";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 import useLazyComponent from "../hooks/useLazyComponent";
 import { percentage } from "../utils/format";
@@ -17,10 +18,13 @@ type PieChartProps = {
 
 const PercentageChart: FC<PieChartProps> = ({ data, className, style }) => {
   const container = useRef<HTMLDivElement>(null);
+  const chart = useRef<ECharts>();
   const [chartsImporting, setChartsImporting] = useState(false);
 
   const render = async () => {
-    if (!container.current) return;
+    if (!container.current) {
+      return;
+    }
 
     setChartsImporting(true);
     const [
@@ -38,7 +42,9 @@ const PercentageChart: FC<PieChartProps> = ({ data, className, style }) => {
 
     echarts.use([CanvasRenderer, PieChart, TooltipComponent, TitleComponent]);
 
-    const chart = echarts.init(container.current);
+    if (!chart.current) {
+      chart.current = echarts.init(container.current);
+    }
 
     const option: PieChartOption = {
       tooltip: {
@@ -64,7 +70,7 @@ const PercentageChart: FC<PieChartProps> = ({ data, className, style }) => {
       ],
     };
 
-    chart.setOption(option);
+    chart.current.setOption(option);
   };
 
   useEffect(() => {

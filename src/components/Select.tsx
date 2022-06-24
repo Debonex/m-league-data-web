@@ -10,14 +10,14 @@ import { ReactComponent as CheckSvg } from "../components/svg/Check.svg";
 
 export type SelectOption = {
   label: string;
-  value: any;
+  value: unknown;
 };
 
 type SelectProps = {
   options: SelectOption[];
   className?: string;
   placeholder?: string;
-  onChange?: (value: any) => void;
+  onChange?: (value: unknown) => void;
 };
 
 const Select: FC<SelectProps> = (props) => {

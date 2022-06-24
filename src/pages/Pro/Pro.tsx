@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 import api from "../../api";
 import InnerLoading from "../../components/InnerLoading";
 import useChoseSeasons from "../../hooks/useChoseSeasons";
-import { teamAvatarUrl } from "../../utils/format";
 import { useData } from "./Data";
 import { useProInfo } from "./Info";
 

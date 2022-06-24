@@ -16,7 +16,7 @@ const useHistoryTable = (
         leftInfo,
         rightInfo
       );
-      let total = winCount + drawCount + loseCount;
+      const total = winCount + drawCount + loseCount;
       if (total !== 0) {
         winWidth = `${(winCount / total) * 100}%`;
         loseWidth = `${(loseCount / total) * 100}%`;

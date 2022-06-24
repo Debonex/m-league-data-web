@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { FC } from "react";
 
 type CheckboxProps = {
-  value: any;
+  value: unknown;
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
