@@ -1,6 +1,7 @@
 import clsx from "clsx";
-import { FC, useMemo } from "react";
+import { FC, ReactNode, useMemo } from "react";
 import PercentageChart from "../../components/PercentageChart";
+import { yakuList } from "../../utils/constants";
 import { fixed, percentage } from "../../utils/format";
 
 export const useData = (statistics: Statistics | undefined) => {
@@ -47,14 +48,7 @@ export const useData = (statistics: Statistics | undefined) => {
             />
           </div>
 
-          <div
-            className={clsx(
-              "mb-2 border-b pb-1 text-lg font-semibold",
-              "dark:border-dark-outstand"
-            )}
-          >
-            基本信息
-          </div>
+          <DataTitle className="mb-2">基本信息</DataTitle>
           <div className="flex flex-wrap">
             <DataLine title="半庄数" value={statistics.game_num} />
             <DataLine title="对局数" value={statistics.kyoku_num} />
@@ -95,14 +89,7 @@ export const useData = (statistics: Statistics | undefined) => {
             <DataLine title="平均顺位" value={fixed(3)(statistics.avg_rank)} />
           </div>
 
-          <div
-            className={clsx(
-              "mt-4 mb-2 border-b pb-1 text-lg font-semibold",
-              "dark:border-dark-outstand"
-            )}
-          >
-            立直
-          </div>
+          <DataTitle className="mt-4 mb-2">立直</DataTitle>
           <div className="flex flex-wrap">
             <DataLine
               title="立直率"
@@ -150,14 +137,7 @@ export const useData = (statistics: Statistics | undefined) => {
             />
           </div>
 
-          <div
-            className={clsx(
-              "mt-4 mb-2 border-b pb-1 text-lg font-semibold",
-              "dark:border-dark-outstand"
-            )}
-          >
-            副露
-          </div>
+          <DataTitle className="mt-4 mb-2">副露</DataTitle>
           <div className="flex flex-wrap">
             <DataLine title="副露率" value={percentage(statistics.furo_rate)} />
             <DataLine
@@ -178,14 +158,7 @@ export const useData = (statistics: Statistics | undefined) => {
             />
           </div>
 
-          <div
-            className={clsx(
-              "mt-4 mb-2 border-b pb-1 text-lg font-semibold",
-              "dark:border-dark-outstand"
-            )}
-          >
-            其它
-          </div>
+          <DataTitle className="mt-4 mb-2">其它</DataTitle>
           <div className="flex flex-wrap">
             <DataLine title="最大连庄" value={statistics.renchan_max_num} />
             <DataLine title="最高得分" value={statistics.highest_score} />
@@ -215,11 +188,41 @@ export const useData = (statistics: Statistics | undefined) => {
               value={fixed(1)(statistics.avg_fourth_score)}
             />
           </div>
+
+          <DataTitle className="mt-4 mb-2">和了役种</DataTitle>
+          <div className="flex flex-wrap">
+            {yakuList.map((yaku, index) => {
+              return (
+                <DataLine
+                  key={index}
+                  title={yaku}
+                  value={statistics.yaku[yaku] ?? 0}
+                />
+              );
+            })}
+          </div>
         </div>
       ),
     [statistics]
   );
   return Data;
+};
+
+const DataTitle: FC<{ children: ReactNode; className?: string }> = ({
+  children,
+  className,
+}) => {
+  return (
+    <div
+      className={clsx(
+        "border-b pb-1 text-lg font-semibold",
+        className,
+        "dark:border-dark-outstand"
+      )}
+    >
+      {children}
+    </div>
+  );
 };
 
 const DataLine: FC<{ title: string; value: string | number }> = ({

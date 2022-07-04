@@ -86,6 +86,7 @@ type Statistics = {
   highest_score: number;
   lowest_score: number;
   renchan_max_num: number;
+  yaku: Record<string, number>;
 };
 
 type GameHistory = {
