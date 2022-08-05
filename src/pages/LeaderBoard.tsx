@@ -122,9 +122,9 @@ const LeaderBoard: FC = () => {
   }, [rank, chosenSeasons]);
 
   return (
-    <div className="mx-auto flex max-w-1920 p-4">
+    <div className="mx-auto h-full max-w-1920 grid-cols-[auto,minmax(0,1fr)] gap-4 p-4 md:grid">
       {/* rankable items */}
-      <div className="hidden flex-col md:flex">
+      <div className="hidden h-full flex-col overflow-auto pr-2 md:flex">
         {ranks.map((item) => (
           <RankableItem
             key={item.key}
@@ -175,13 +175,13 @@ const LeaderBoard: FC = () => {
         />
       </div>
 
-      <div className="ml-4 flex-grow">
+      <div className="h-full grid-rows-[auto,minmax(0,1fr)] overflow-auto md:grid">
         {SeasonFilter}
 
         {/* rank items */}
         <div
           className={clsx(
-            "relative rounded-lg border-2 p-3",
+            "relative overflow-auto rounded-lg border-2 p-3",
             "dark:border-dark-outstand dark:bg-dark-secondary"
           )}
         >

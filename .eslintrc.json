@@ -23,5 +23,6 @@
   },
   "rules": {
     "curly": 1
-  }
+  },
+  "ignorePatterns": ["tailwind.config.js"]
 }

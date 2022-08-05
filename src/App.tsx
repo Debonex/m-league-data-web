@@ -12,19 +12,21 @@ const App: FC = () => {
   return (
     <div
       className={clsx(
-        "h-screen w-screen overflow-auto",
+        "grid h-screen w-screen grid-rows-[auto,minmax(0,1fr)]",
         "dark:bg-dark-main dark:text-white"
       )}
     >
       <Navigator className="sticky top-0 z-30" />
-      <Routes>
-        <Route path="*" element={<LeaderBoard />} />
-        <Route path="/teams" element={<Teams />} />
-        <Route path="/team" element={<Team />} />
-        <Route path="/leader-board" element={<LeaderBoard />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/pro" element={<Pro />} />
-      </Routes>
+      <div className="w-full overflow-auto">
+        <Routes>
+          <Route path="*" element={<LeaderBoard />} />
+          <Route path="/teams" element={<Teams />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/leader-board" element={<LeaderBoard />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/pro" element={<Pro />} />
+        </Routes>
+      </div>
     </div>
   );
 };
