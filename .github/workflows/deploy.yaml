@@ -1,0 +1,30 @@
+# deploy ml-web image to ecs
+name: deploy docker image
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: check out repo
+        uses: actions/checkout@v3
+      - name: build image and push it to ghcr.io
+        run: |
+          echo "${{ secrets.PACKAGE_GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build . -t ghcr.io/debonex/m-league-data-web:latest -f ./deployment/Dockerfile
+          docker push ghcr.io/debonex/m-league-data-web:latest
+      - name: deploy image to ecs
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USERNAME }}
+          password: ${{ secrets.ECS_PASSWORD }}
+          script: |
+            echo "${{ secrets.PACKAGE_GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker stop ml-web
+            docker rmi ghcr.io/debonex/m-league-data-web:latest
+            docker pull ghcr.io/debonex/m-league-data-web:latest
+            docker run -d --rm --name ml-web --network ml -p 7879:80 ghcr.io/debonex/m-league-data-web:latest

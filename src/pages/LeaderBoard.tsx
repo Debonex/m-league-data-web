@@ -179,41 +179,43 @@ const LeaderBoard: FC = () => {
         {SeasonFilter}
 
         {/* rank items */}
-        <div
-          className={clsx(
-            "relative overflow-auto rounded-lg border-2 p-3",
-            "dark:border-dark-outstand dark:bg-dark-secondary"
-          )}
-        >
-          <div className={clsx("flex py-2", "dark:text-white/50")}>
-            <div className="w-16 pl-5 md:w-1/5">排名</div>
-            <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
-              姓名
+        <div className="relative">
+          <div
+            className={clsx(
+              "h-full overflow-auto rounded-lg border-2 p-3",
+              "dark:border-dark-outstand dark:bg-dark-secondary"
+            )}
+          >
+            <div className={clsx("flex py-2", "dark:text-white/50")}>
+              <div className="w-16 pl-5 md:w-1/5">排名</div>
+              <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
+                姓名
+              </div>
+              <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
+                {rank.label}
+              </div>
             </div>
-            <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
-              {rank.label}
+            <div>
+              {list.map((item, idx) => (
+                <RankItem
+                  key={item.pro_id}
+                  rank={idx + 1}
+                  item={item}
+                  rankInnerClass={clsx({
+                    "border-l-2": idx < 3,
+                    "border-l-gold": idx === 0,
+                    "border-l-silver": idx === 1,
+                    "border-l-bronze": idx === 2,
+                  })}
+                  rankOuterClass={clsx({
+                    "bg-gradient-to-r": idx < 3,
+                    "from-gold/25 dark:to-dark-outstand": idx === 0,
+                    "from-silver/25 dark:to-dark-secondary": idx === 1,
+                    "from-bronze/25 dark:to-dark-outstand": idx === 2,
+                  })}
+                />
+              ))}
             </div>
-          </div>
-          <div>
-            {list.map((item, idx) => (
-              <RankItem
-                key={item.pro_id}
-                rank={idx + 1}
-                item={item}
-                rankInnerClass={clsx({
-                  "border-l-2": idx < 3,
-                  "border-l-gold": idx === 0,
-                  "border-l-silver": idx === 1,
-                  "border-l-bronze": idx === 2,
-                })}
-                rankOuterClass={clsx({
-                  "bg-gradient-to-r": idx < 3,
-                  "from-gold/25 dark:to-dark-outstand": idx === 0,
-                  "from-silver/25 dark:to-dark-secondary": idx === 1,
-                  "from-bronze/25 dark:to-dark-outstand": idx === 2,
-                })}
-              />
-            ))}
           </div>
           {listLoading && <InnerLoading />}
         </div>
@@ -274,9 +276,9 @@ const RankItem: FC<{
       <div className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left">
         <img
           src={proAvatarUrl(item.pro_id)}
-          className="z-10 w-6 rounded-full md:w-8"
+          className="w-6 rounded-full md:w-8"
         />
-        <span className="z-10 ml-2  md:ml-4">{item.pro_name}</span>
+        <span className="ml-2 md:ml-4">{item.pro_name}</span>
         <img
           src={teamAvatarUrl(item.team_id)}
           className="absolute top-1/2 left-1/2  w-20 -translate-x-1/2 -translate-y-1/2 opacity-10"

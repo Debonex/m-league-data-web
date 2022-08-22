@@ -5,3 +5,5 @@ dist/
 
 # generated files
 src/styles/tailwind.css
+
+.vscode
