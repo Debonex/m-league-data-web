@@ -1,4 +1,4 @@
-export const ossUrl = "https://m-league-data.oss-cn-hangzhou.aliyuncs.com";
+export const ossUrl = import.meta.env.DEV ? '' : "https://img.mleaguedata.fun";
 
 export const yakuList = [
   "リーチ",
