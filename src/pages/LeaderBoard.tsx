@@ -13,6 +13,7 @@ import {
   proAvatarUrl,
   teamAvatarUrl,
 } from "../utils/format";
+import { umami } from "../utils/umami";
 
 const ranks: Rankable[] = [
   { key: "point", label: "Point" },
@@ -125,7 +126,10 @@ const LeaderBoard: FC = () => {
             key={item.key}
             currentRank={rank}
             rank={item}
-            onClick={() => setRank(item)}
+            onClick={() => {
+              umami(`choose-rank:${item.label}`);
+              setRank(item);
+            }}
             className="mb-2"
           />
         ))}
@@ -149,6 +153,7 @@ const LeaderBoard: FC = () => {
             currentRank={rank}
             onClick={() => {
               setRank(item);
+              umami(`choose-rank:${item.label}`);
               setRankableShow(false);
             }}
           />

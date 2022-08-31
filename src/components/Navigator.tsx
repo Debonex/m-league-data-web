@@ -3,6 +3,7 @@ import { FC, ReactNode, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, To } from "react-router-dom";
 import { langs } from "../utils/constants";
+import { umami } from "../utils/umami";
 import Menu from "./headless/Menu";
 import MenuButton from "./headless/MenuButton";
 import MenuItem from "./headless/MenuItem";
@@ -17,6 +18,7 @@ const Navigator: FC<{ className?: string }> = (props) => {
     const langKey = itemKey as string;
     i18n.changeLanguage(langKey);
     localStorage.setItem("lang", langKey);
+    umami(`change-lang:${langKey}`);
   }, []);
 
   return (
