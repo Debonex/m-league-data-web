@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../api";
 import InnerLoading from "../../components/InnerLoading";
 import Select, { SelectOption } from "../../components/Select";
-import { useProInfo } from "../Pro/Info";
+import ProInfo from "../Pro/Info";
 import { useHistoryTable } from "./HistoryTable";
 import useTeamInfo from "./TeamInfo";
 
@@ -12,6 +13,7 @@ const ProTeam: FC<{
   teamOptions: SelectOption[];
   optionsLoading: boolean;
 }> = ({ chosenSeasons, proOptions, teamOptions, optionsLoading }) => {
+  const { t } = useTranslation();
   const [proInfo, setProInfo] = useState<ProInfo>();
   const [teamInfo, setTeamInfo] = useState<TeamInfo>();
   const [infoLoading, setInfoLoading] = useState(false);
@@ -83,8 +85,8 @@ const ProTeam: FC<{
         <Select
           options={proOptions}
           className="flex-grow basis-0"
-          placeholder="请选择选手"
-          onChange={(proId) => handleProChange(proId)}
+          placeholder={t("请选择选手")}
+          onChange={(proId) => handleProChange(proId as number)}
         />
         <div className="mx-2 select-none text-xl font-extrabold text-primary-main md:mx-4">
           VS
@@ -92,15 +94,15 @@ const ProTeam: FC<{
         <Select
           options={teamOptions}
           className="flex-grow basis-0"
-          placeholder="请选择队伍"
-          onChange={(teamId) => handleTeamChange(teamId)}
+          placeholder={t("请选择队伍")}
+          onChange={(teamId) => handleTeamChange(teamId as number)}
         />
         {optionsLoading && <InnerLoading />}
       </div>
 
       <div className="relative mt-3 flex flex-wrap">
         <div className="w-full flex-grow-0 basis-auto md:w-1/2">
-          {useProInfo(proInfo)}
+          <ProInfo info={proInfo} />
         </div>
         <div className="mt-3 w-full flex-grow-0 basis-auto md:mt-0 md:w-1/2">
           {useTeamInfo(teamInfo)}

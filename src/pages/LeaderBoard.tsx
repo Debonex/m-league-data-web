@@ -1,7 +1,9 @@
 import clsx from "clsx";
 import { FC, MouseEventHandler, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import api from "../api";
+import Arrow from "../components/Arrow";
 import InnerLoading from "../components/InnerLoading";
 import { ReactComponent as FilterSvg } from "../components/svg/Filter.svg";
 import useChoseSeasons from "../hooks/useChoseSeasons";
@@ -50,20 +52,16 @@ const ranks: Rankable[] = [
   { key: "avg_furo_agari_score", label: "副露平均打点", format: fixed(2) },
 ];
 
-type ProRankItem = {
-  pro_id: number;
-  team_id: number;
-  pro_name: string;
-  value: number | string;
-};
-
 const LeaderBoard: FC = () => {
   // current rankable item
   const [rank, setRank] = useState<Rankable>({ key: "point", label: "Point" });
-  const [list, setList] = useState<ProRankItem[]>([]);
+  const [list, setList] = useState<ProValue[]>([]);
   // if mobile rankable items show
   const [rankableShow, setRankableShow] = useState(false);
   const [listLoading, setListLoading] = useState(false);
+  const [asc, setAsc] = useState(false);
+
+  const { t } = useTranslation();
 
   const {
     chosenSeasons,
@@ -80,20 +78,8 @@ const LeaderBoard: FC = () => {
     });
     setListLoading(false);
     if (res.status === 200) {
-      if (rank.asc) {
-        res.data.sort((a, b) => a.value - b.value);
-      }
-      if (rank.format) {
-        const format = rank.format;
-        setList(
-          res.data.map((item) => ({
-            ...item,
-            value: format(item.value),
-          }))
-        );
-      } else {
-        setList(res.data);
-      }
+      setAsc(!!rank.asc);
+      setListAsc(res.data, !!rank.asc);
     }
   };
 
@@ -120,6 +106,15 @@ const LeaderBoard: FC = () => {
       setList([]);
     }
   }, [rank, chosenSeasons]);
+
+  const changeAsc = () => {
+    setAsc(!asc);
+    setListAsc(list, !asc);
+  };
+
+  const setListAsc = (list: ProValue[], asc: boolean) => {
+    setList(list.sort((a, b) => (asc ? a.value - b.value : b.value - a.value)));
+  };
 
   return (
     <div className="mx-auto h-full max-w-1920 grid-cols-[auto,minmax(0,1fr)] gap-4 p-4 md:grid">
@@ -182,17 +177,26 @@ const LeaderBoard: FC = () => {
         <div className="relative">
           <div
             className={clsx(
-              "h-full overflow-auto rounded-lg border-2 p-3",
+              "h-full overflow-auto rounded-lg border-2 p-3 pt-0",
               "dark:border-dark-outstand dark:bg-dark-secondary"
             )}
           >
-            <div className={clsx("flex py-2", "dark:text-white/50")}>
-              <div className="w-16 pl-5 md:w-1/5">排名</div>
+            <div
+              className={clsx(
+                "sticky top-0 z-10 flex py-2",
+                "backdrop-blur-md dark:bg-dark-secondary/80 dark:text-white/50"
+              )}
+            >
+              <div className="w-16 pl-5 md:w-1/5">{t("排名")}</div>
               <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
-                姓名
+                {t("姓名")}
               </div>
-              <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
-                {rank.label}
+              <div
+                className="flex flex-shrink-0 flex-grow basis-0 cursor-pointer items-center text-center md:text-left"
+                onClick={changeAsc}
+              >
+                {t(rank.label)}
+                <Arrow className="ml-2 h-4 w-4 text-primary-main" up={asc} />
               </div>
             </div>
             <div>
@@ -213,6 +217,7 @@ const LeaderBoard: FC = () => {
                     "from-silver/25 dark:to-dark-secondary": idx === 1,
                     "from-bronze/25 dark:to-dark-outstand": idx === 2,
                   })}
+                  format={rank.format}
                 />
               ))}
             </div>
@@ -252,9 +257,10 @@ const RankableItem: FC<{
 
 const RankItem: FC<{
   rank: number;
-  item: ProRankItem;
+  item: ProValue;
   rankInnerClass: string;
   rankOuterClass: string;
+  format?: (value: number) => string;
 }> = (props) => {
   const item = props.item;
   return (
@@ -290,7 +296,7 @@ const RankItem: FC<{
           "dark:group-odd:from-dark-outstand dark:group-odd:to-dark-secondary"
         )}
       >
-        {item.value}
+        {props.format ? props.format(item.value) : item.value}
       </div>
     </Link>
   );

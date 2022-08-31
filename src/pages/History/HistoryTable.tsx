@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { formatPoint } from "../../utils/format";
 
@@ -8,6 +9,7 @@ const useHistoryTable = (
   leftInfo?: ProInfo | TeamInfo,
   rightInfo?: ProInfo | TeamInfo
 ) => {
+  const { t } = useTranslation();
   const HistoryTable = useMemo(() => {
     let [winWidth, loseWidth] = ["0%", "0%"];
     if (leftInfo && rightInfo && history) {
@@ -52,12 +54,12 @@ const useHistoryTable = (
               "dark:bg-dark-outstand/75"
             )}
           >
-            <div className="flex-grow basis-0 text-center">赛季</div>
-            <div className="flex-grow basis-0 text-center">日期</div>
-            <div className="flex-grow basis-0 text-center">东起</div>
-            <div className="flex-grow basis-0 text-center">南起</div>
-            <div className="flex-grow basis-0 text-center">西起</div>
-            <div className="flex-grow basis-0 text-center">北起</div>
+            <div className="flex-grow basis-0 text-center">{t("赛季")}</div>
+            <div className="flex-grow basis-0 text-center">{t("日期")}</div>
+            <div className="flex-grow basis-0 text-center">{t("东起")}</div>
+            <div className="flex-grow basis-0 text-center">{t("南起")}</div>
+            <div className="flex-grow basis-0 text-center">{t("西起")}</div>
+            <div className="flex-grow basis-0 text-center">{t("北起")}</div>
           </div>
           {history &&
             history.games.map((game) => {
@@ -121,10 +123,10 @@ const useHistoryTable = (
                   key={game.id}
                 >
                   <div className="w-1/2 flex-grow-0 basis-auto">
-                    赛季：{game.season_name}
+                    {t("赛季")}: {game.season_name}
                   </div>
                   <div className="w-1/2 flex-grow-0 basis-auto">
-                    日期：{game.time.substring(0, 10)}
+                    {t("日期")}: {game.time.substring(0, 10)}
                   </div>
                   <div className="flex flex-wrap">
                     {game.pros.map((pro, idx) => {

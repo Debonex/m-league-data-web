@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../api";
 import InnerLoading from "../../components/InnerLoading";
 import Select, { SelectOption } from "../../components/Select";
@@ -10,6 +11,7 @@ const TeamTeam: FC<{
   teamOptions: SelectOption[];
   optionsLoading: boolean;
 }> = ({ chosenSeasons, teamOptions, optionsLoading }) => {
+  const { t } = useTranslation();
   const [leftInfo, setLeftInfo] = useState<TeamInfo>();
   const [rightInfo, setRightInfo] = useState<TeamInfo>();
   const [infoLoading, setInfoLoading] = useState(false);
@@ -69,8 +71,8 @@ const TeamTeam: FC<{
         <Select
           options={teamOptions}
           className="flex-grow basis-0"
-          placeholder="请选择队伍"
-          onChange={(teamId) => handleTeamChange(teamId, true)}
+          placeholder={t("请选择队伍")}
+          onChange={(teamId) => handleTeamChange(teamId as number, true)}
         />
         <div className="mx-2 select-none text-xl font-extrabold text-primary-main md:mx-4">
           VS
@@ -78,8 +80,8 @@ const TeamTeam: FC<{
         <Select
           options={teamOptions}
           className="flex-grow basis-0"
-          placeholder="请选择队伍"
-          onChange={(teamId) => handleTeamChange(teamId, false)}
+          placeholder={t("请选择队伍")}
+          onChange={(teamId) => handleTeamChange(teamId as number, false)}
         />
         {optionsLoading && <InnerLoading />}
       </div>

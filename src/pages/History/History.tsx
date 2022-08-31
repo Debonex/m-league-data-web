@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { FC, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../api";
 import Button from "../../components/Button";
 import InnerLoading from "../../components/InnerLoading";
@@ -10,6 +11,7 @@ import ProTeam from "./ProTeam";
 import TeamTeam from "./TeamTeam";
 
 const History: FC = () => {
+  const { t } = useTranslation();
   const {
     chosenSeasons,
     loading: seasonsLoading,
@@ -84,7 +86,7 @@ const History: FC = () => {
           active={between === "pro_pro"}
           className="rounded-l-md"
         >
-          选手间
+          {t("选手间")}
         </Button>
         <Button
           flat
@@ -92,7 +94,7 @@ const History: FC = () => {
           onClick={() => setBetween("pro_team")}
           active={between === "pro_team"}
         >
-          选手与队伍间
+          {t("选手与队伍间")}
         </Button>
         <Button
           flat
@@ -101,7 +103,7 @@ const History: FC = () => {
           active={between === "team_team"}
           className="rounded-r-md"
         >
-          队伍间
+          {t("队伍间")}
         </Button>
       </div>
 

@@ -11,15 +11,18 @@
     "build": "vite build",
     "preview": "vite preview",
     "preci": "rm -fr node_modules",
-    "ci": "yarn install --frozen-lockfile"
+    "ci": "yarn install --frozen-lockfile",
+    "lint": "yarn eslint ."
   },
   "dependencies": {
     "axios": "^0.27.2",
     "clsx": "^1.1.1",
     "echarts": "^5.3.2",
+    "i18next": "^21.9.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
+    "react-i18next": "^11.18.5",
     "react-router-dom": "^6.3.0",
     "react-transition-group": "^4.4.2"
   },

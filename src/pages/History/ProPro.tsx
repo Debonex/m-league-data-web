@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../api";
 import InnerLoading from "../../components/InnerLoading";
 import Select, { SelectOption } from "../../components/Select";
-import { useProInfo } from "../Pro/Info";
+import ProInfo from "../Pro/Info";
 import { useHistoryTable } from "./HistoryTable";
 
 const ProPro: FC<{
@@ -10,6 +11,7 @@ const ProPro: FC<{
   proOptions: SelectOption[];
   optionsLoading: boolean;
 }> = ({ chosenSeasons, proOptions, optionsLoading }) => {
+  const { t } = useTranslation();
   const [leftInfo, setLeftInfo] = useState<ProInfo>();
   const [rightInfo, setRightInfo] = useState<ProInfo>();
   const [infoLoading, setInfoLoading] = useState(false);
@@ -70,8 +72,8 @@ const ProPro: FC<{
         <Select
           options={proOptions}
           className="flex-grow basis-0"
-          placeholder="请选择选手"
-          onChange={(proId) => handleProChange(proId, true)}
+          placeholder={t("请选择选手")}
+          onChange={(proId) => handleProChange(proId as number, true)}
         />
         <div className="mx-2 select-none text-xl font-extrabold text-primary-main md:mx-4">
           VS
@@ -79,18 +81,18 @@ const ProPro: FC<{
         <Select
           options={proOptions}
           className="flex-grow basis-0"
-          placeholder="请选择选手"
-          onChange={(proId) => handleProChange(proId, false)}
+          placeholder={t("请选择选手")}
+          onChange={(proId) => handleProChange(proId as number, false)}
         />
         {optionsLoading && <InnerLoading />}
       </div>
 
       <div className="relative mt-3 flex flex-wrap">
         <div className="w-full flex-grow-0 basis-auto md:w-1/2">
-          {useProInfo(leftInfo)}
+          <ProInfo info={leftInfo} />
         </div>
         <div className="w-full flex-grow-0 basis-auto md:w-1/2">
-          {useProInfo(rightInfo, true)}
+          <ProInfo info={rightInfo} reverse={true} />
         </div>
         {infoLoading && <InnerLoading />}
       </div>

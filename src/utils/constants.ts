@@ -1,4 +1,4 @@
-export const ossUrl = import.meta.env.DEV ? '' : "https://img.mleaguedata.fun";
+export const ossUrl = import.meta.env.DEV ? "" : "https://img.mleaguedata.fun";
 
 export const yakuList = [
   "リーチ",
@@ -37,4 +37,11 @@ export const yakuList = [
   "国士無双",
   "四暗刻",
   "大三元",
+];
+
+export const yakumanList = ["国士無双", "四暗刻", "大三元"];
+
+export const langs = [
+  { key: "zh_CN", label: "中文（简体）" },
+  { key: "jp", label: "日本語 (WIP)" },
 ];
