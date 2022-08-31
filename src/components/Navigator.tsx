@@ -8,7 +8,7 @@ import MenuButton from "./headless/MenuButton";
 import MenuItem from "./headless/MenuItem";
 import MenuItems from "./headless/MenuItems";
 import { ReactComponent as GithubSvg } from "./svg/github.svg";
-import { ReactComponent as LangSvg } from "./svg/lang.svg";
+import { ReactComponent as LangSvg } from "./svg/Lang.svg";
 
 const Navigator: FC<{ className?: string }> = (props) => {
   const { t, i18n } = useTranslation();
