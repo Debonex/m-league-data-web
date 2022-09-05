@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../api";
 import Button from "../components/Button";
 import Checkbox from "../components/Checkbox";
@@ -7,6 +8,7 @@ const useChoseSeasons = () => {
   const [seasons, setSeasons] = useState<SeasonInfo[]>([]);
   const [chosenSeasons, setChosenSeasons] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     api
@@ -31,6 +33,17 @@ const useChoseSeasons = () => {
     }
   };
 
+  const label = useCallback(
+    (seasonName: string) => {
+      const match = seasonName.replace("赛季", "").match(/(\d+)(.+)/);
+      if (!match) {
+        return "";
+      }
+      return `${match[1]}${t(match[2])}`;
+    },
+    [t]
+  );
+
   return {
     chosenSeasons,
     loading,
@@ -42,7 +55,7 @@ const useChoseSeasons = () => {
             value={season.id}
             onChange={(checked) => handleSeasonChange(season.id, checked)}
             checked={chosenSeasons.includes(season.id)}
-            label={season.season_name.replace("赛季", "")}
+            label={label(season.season_name)}
           />
         ))}
       </div>
@@ -55,7 +68,7 @@ const useChoseSeasons = () => {
           }}
           className="mr-2"
         >
-          全选
+          {t("全选")}
         </Button>
 
         <Button
@@ -63,7 +76,7 @@ const useChoseSeasons = () => {
             setChosenSeasons([]);
           }}
         >
-          清空
+          {t("清空")}
         </Button>
       </div>
     ),

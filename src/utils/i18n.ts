@@ -1,14 +1,14 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import ja from "../i18n/ja.json";
 import zh_CN from "../i18n/zh_CN.json";
-import jp from "../i18n/jp.json";
 
 const resources = {
   zh_CN: {
     translation: zh_CN,
   },
-  jp: {
-    translation: jp,
+  ja: {
+    translation: ja,
   },
 };
 

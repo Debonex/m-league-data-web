@@ -55,7 +55,7 @@ const StatisticData: FC<{ statistics?: Statistics }> = ({ statistics }) => {
       <div className="flex flex-wrap">
         <DataLine title={t("半庄数")} value={statistics.game_num} />
         <DataLine title={t("对局数")} value={statistics.kyoku_num} />
-        <DataLine title="Point" value={fixed(2)(statistics.point)} />
+        <DataLine title={t("Point")} value={fixed(2)(statistics.point)} />
         <DataLine
           title={t("和牌率")}
           value={percentage(statistics.agari_rate)}

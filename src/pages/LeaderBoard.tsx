@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FC, MouseEventHandler, useEffect, useMemo, useState } from "react";
+import { FC, MouseEventHandler, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import api from "../api";
@@ -84,22 +84,6 @@ const LeaderBoard: FC = () => {
     }
   };
 
-  const SeasonFilter = useMemo(
-    () => (
-      <div
-        className={clsx(
-          "relative mb-4 rounded-lg border-2 p-3",
-          "dark:border-dark-outstand dark:bg-dark-secondary"
-        )}
-      >
-        {SeasonCheckboxes}
-        {SeasonCheckButtons}
-        {seasonsLoading && <InnerLoading />}
-      </div>
-    ),
-    [chosenSeasons, seasonsLoading]
-  );
-
   useEffect(() => {
     if (chosenSeasons.length) {
       fetchRank();
@@ -176,7 +160,16 @@ const LeaderBoard: FC = () => {
       </div>
 
       <div className="h-full grid-rows-[auto,minmax(0,1fr)] overflow-auto md:grid">
-        {SeasonFilter}
+        <div
+          className={clsx(
+            "relative mb-4 rounded-lg border-2 p-3",
+            "dark:border-dark-outstand dark:bg-dark-secondary"
+          )}
+        >
+          {SeasonCheckboxes}
+          {SeasonCheckButtons}
+          {seasonsLoading && <InnerLoading />}
+        </div>
 
         {/* rank items */}
         <div className="relative">
@@ -242,6 +235,7 @@ const RankableItem: FC<{
 }> = (props) => {
   const rank = props.rank;
   const currentRank = props.currentRank;
+  const { t } = useTranslation();
   return (
     <div
       className={clsx(
@@ -255,7 +249,7 @@ const RankableItem: FC<{
       )}
       onClick={props.onClick}
     >
-      <div>{rank.label}</div>
+      <div>{t(rank.label)}</div>
     </div>
   );
 };
