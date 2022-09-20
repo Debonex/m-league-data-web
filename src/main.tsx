@@ -1,10 +1,10 @@
-import "@/styles/scrollbar.css";
-import "@/styles/tailwind.css";
-import "@/styles/transitions.css";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import "styles/scrollbar.css";
+import "styles/tailwind.css";
+import "styles/transitions.css";
+import "utils/i18n";
 import App from "./App";
-import "./utils/i18n";
 
 const rootDom = document.getElementById("root");
 

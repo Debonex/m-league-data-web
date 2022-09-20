@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
-import api from "../api";
+import api from "../utils/api";
 import Card from "../components/Card";
 import useChoseSeasons from "../hooks/useChoseSeasons";
 import { dateStrToAge, proAvatarUrl } from "../utils/format";

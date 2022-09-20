@@ -1,11 +1,11 @@
 import clsx from "clsx";
+import Button from "components/Button";
+import InnerLoading from "components/InnerLoading";
+import { SelectOption } from "components/Select";
+import useChoseSeasons from "hooks/useChoseSeasons";
 import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import api from "../../api";
-import Button from "../../components/Button";
-import InnerLoading from "../../components/InnerLoading";
-import { SelectOption } from "../../components/Select";
-import useChoseSeasons from "../../hooks/useChoseSeasons";
+import api from "utils/api";
 import ProPro from "./ProPro";
 import ProTeam from "./ProTeam";
 import TeamTeam from "./TeamTeam";

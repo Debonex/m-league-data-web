@@ -1,5 +1,5 @@
+import InnerLoading from "components/InnerLoading";
 import { ReactNode, useMemo } from "react";
-import InnerLoading from "../components/InnerLoading";
 
 const useLazyComponent = (component: ReactNode, loading: boolean) => {
   return useMemo(

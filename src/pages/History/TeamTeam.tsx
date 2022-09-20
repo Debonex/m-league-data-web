@@ -1,8 +1,8 @@
+import InnerLoading from "components/InnerLoading";
+import Select, { SelectOption } from "components/Select";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import api from "../../api";
-import InnerLoading from "../../components/InnerLoading";
-import Select, { SelectOption } from "../../components/Select";
+import api from "utils/api";
 import { useHistoryTable } from "./HistoryTable";
 import useTeamInfo from "./TeamInfo";
 

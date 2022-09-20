@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { teamAvatarUrl } from "../../utils/format";
+import { teamAvatarUrl } from "utils/format";
 
 const useTeamInfo = (teamInfo?: TeamInfo) =>
   useMemo(() => {

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { dateStrToAge, proAvatarUrl, teamAvatarUrl } from "../../utils/format";
+import { dateStrToAge, proAvatarUrl, teamAvatarUrl } from "utils/format";
 
 const ProInfo: FC<{ info?: ProInfo; reverse?: boolean }> = ({
   info,

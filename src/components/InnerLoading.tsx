@@ -1,6 +1,6 @@
 import clsx from "clsx";
+import Loading from "components/Loading";
 import { FC } from "react";
-import Loading from "./Loading";
 
 const InnerLoading: FC<{ noMask?: boolean }> = ({ noMask = false }) => {
   return (

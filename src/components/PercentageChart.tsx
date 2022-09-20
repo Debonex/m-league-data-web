@@ -1,12 +1,12 @@
 import {
-  TooltipComponentOption,
-  PieSeriesOption,
   ComposeOption,
+  PieSeriesOption,
+  TooltipComponentOption,
 } from "echarts";
 import { ECharts } from "echarts/types/dist/core";
+import useLazyComponent from "hooks/useLazyComponent";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
-import useLazyComponent from "../hooks/useLazyComponent";
-import { percentage } from "../utils/format";
+import { percentage } from "utils/format";
 
 type PieChartOption = ComposeOption<TooltipComponentOption | PieSeriesOption>;
 

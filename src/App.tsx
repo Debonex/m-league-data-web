@@ -1,13 +1,13 @@
 import clsx from "clsx";
+import Navigator from "components/Navigator";
+import History from "pages/History/History";
+import LeaderBoard from "pages/LeaderBoard";
+import Pro from "pages/Pro/Pro";
+import Team from "pages/Team";
+import Teams from "pages/Teams";
 import { FC } from "react";
 import { Helmet } from "react-helmet";
 import { Route, Routes } from "react-router-dom";
-import Navigator from "./components/Navigator";
-import History from "./pages/History/History";
-import LeaderBoard from "./pages/LeaderBoard";
-import Pro from "./pages/Pro/Pro";
-import Team from "./pages/Team";
-import Teams from "./pages/Teams";
 
 const App: FC = () => {
   return (

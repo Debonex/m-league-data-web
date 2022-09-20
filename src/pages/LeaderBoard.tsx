@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { FC, MouseEventHandler, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import api from "../api";
+import api from "../utils/api";
 import Arrow from "../components/Arrow";
 import InnerLoading from "../components/InnerLoading";
 import { ReactComponent as FilterSvg } from "../components/svg/Filter.svg";

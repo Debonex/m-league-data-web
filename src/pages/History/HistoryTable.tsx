@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { formatPoint } from "../../utils/format";
+import { formatPoint } from "utils/format";
 
 const useHistoryTable = (
   history?: GameHistory,

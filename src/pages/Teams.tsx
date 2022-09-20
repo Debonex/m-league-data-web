@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../api";
+import api from "../utils/api";
 import InnerLoading from "../components/InnerLoading";
 import { teamAvatarUrl } from "../utils/format";
 

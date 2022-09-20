@@ -1,6 +1,6 @@
 import clsx from "clsx";
+import InnerLoading from "components/InnerLoading";
 import { FC, ReactNode } from "react";
-import InnerLoading from "./InnerLoading";
 
 const Card: FC<{
   title: string;

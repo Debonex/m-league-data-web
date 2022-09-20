@@ -1,11 +1,11 @@
 import clsx from "clsx";
+import Arrow from "components/Arrow";
+import Menu, { MenuContext } from "components/headless/Menu";
+import MenuButton from "components/headless/MenuButton";
+import MenuItem from "components/headless/MenuItem";
+import MenuItems from "components/headless/MenuItems";
+import { ReactComponent as CheckSvg } from "components/svg/Check.svg";
 import { FC, useCallback, useContext, useState } from "react";
-import { ReactComponent as CheckSvg } from "../components/svg/Check.svg";
-import Arrow from "./Arrow";
-import Menu, { MenuContext } from "./headless/Menu";
-import MenuButton from "./headless/MenuButton";
-import MenuItem from "./headless/MenuItem";
-import MenuItems from "./headless/MenuItems";
 
 export type SelectOption = {
   label: string;

@@ -1,9 +1,9 @@
 import clsx from "clsx";
+import PercentageChart from "components/PercentageChart";
 import { FC, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import PercentageChart from "../../components/PercentageChart";
-import { yakuList, yakumanList } from "../../utils/constants";
-import { fixed, percentage } from "../../utils/format";
+import { yakuList, yakumanList } from "utils/constants";
+import { fixed, percentage } from "utils/format";
 
 const StatisticData: FC<{ statistics?: Statistics }> = ({ statistics }) => {
   const { t } = useTranslation();

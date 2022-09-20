@@ -1,8 +1,8 @@
+import Button from "components/Button";
+import Checkbox from "components/Checkbox";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import api from "../api";
-import Button from "../components/Button";
-import Checkbox from "../components/Checkbox";
+import api from "utils/api";
 
 const useChoseSeasons = () => {
   const [seasons, setSeasons] = useState<SeasonInfo[]>([]);

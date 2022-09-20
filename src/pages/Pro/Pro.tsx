@@ -1,10 +1,10 @@
+import Card from "components/Card";
+import useChoseSeasons from "hooks/useChoseSeasons";
+import StatisticData from "pages/components/StatisticData";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
-import api from "../../api";
-import Card from "../../components/Card";
-import useChoseSeasons from "../../hooks/useChoseSeasons";
-import StatisticData from "../components/StatisticData";
+import api from "utils/api";
 import ProInfo from "./Info";
 
 const Pro: FC = () => {

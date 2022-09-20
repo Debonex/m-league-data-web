@@ -1,6 +1,6 @@
 import clsx from "clsx";
+import useRipples from "hooks/useRipples";
 import React, { FC } from "react";
-import useRipples from "../hooks/useRipples";
 
 type ButtonProps = {
   children?: React.ReactNode;

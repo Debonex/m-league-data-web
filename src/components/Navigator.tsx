@@ -1,15 +1,15 @@
 import clsx from "clsx";
+import Menu from "components/headless/Menu";
+import MenuButton from "components/headless/MenuButton";
+import MenuItem from "components/headless/MenuItem";
+import MenuItems from "components/headless/MenuItems";
+import { ReactComponent as GithubSvg } from "components/svg/github.svg";
+import { ReactComponent as LangSvg } from "components/svg/Lang.svg";
 import { FC, ReactNode, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, To } from "react-router-dom";
-import { langs } from "../utils/constants";
-import { umami } from "../utils/umami";
-import Menu from "./headless/Menu";
-import MenuButton from "./headless/MenuButton";
-import MenuItem from "./headless/MenuItem";
-import MenuItems from "./headless/MenuItems";
-import { ReactComponent as GithubSvg } from "./svg/github.svg";
-import { ReactComponent as LangSvg } from "./svg/Lang.svg";
+import { langs } from "utils/constants";
+import { umami } from "utils/umami";
 
 const Navigator: FC<{ className?: string }> = (props) => {
   const { t, i18n } = useTranslation();

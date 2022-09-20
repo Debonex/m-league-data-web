@@ -1,7 +1,7 @@
+import ja from "i18n/ja.json";
+import zh_CN from "i18n/zh_CN.json";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import ja from "../i18n/ja.json";
-import zh_CN from "../i18n/zh_CN.json";
 
 const resources = {
   zh_CN: {
