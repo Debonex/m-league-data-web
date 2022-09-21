@@ -12,15 +12,12 @@ type ButtonProps = {
 };
 
 const Button: FC<ButtonProps> = (props) => {
-  const [addRipple, ripples] = useRipples(
-    props.active ? "translucent" : "primary"
-  );
+  const [addRipple, ripples] = useRipples();
 
   const handleClick = (e: React.MouseEvent) => {
     addRipple(e);
     props.onClick?.();
   };
-
   return (
     <div
       className={clsx(
