@@ -3,7 +3,7 @@ import Select, { SelectOption } from "components/Select";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import api from "utils/api";
-import { useHistoryTable } from "./HistoryTable";
+import HistoryTable from "./HistoryTable";
 import useTeamInfo from "./TeamInfo";
 
 const TeamTeam: FC<{
@@ -97,7 +97,11 @@ const TeamTeam: FC<{
       </div>
 
       <div className="relative mt-3">
-        {useHistoryTable(history, leftInfo, rightInfo)}
+        <HistoryTable
+          history={history}
+          leftInfo={leftInfo}
+          rightInfo={rightInfo}
+        />
         {historyLoading && <InnerLoading />}
       </div>
     </div>

@@ -4,7 +4,7 @@ import ProInfo from "pages/Pro/Info";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import api from "utils/api";
-import { useHistoryTable } from "./HistoryTable";
+import HistoryTable from "./HistoryTable";
 
 const ProPro: FC<{
   chosenSeasons: number[];
@@ -98,7 +98,11 @@ const ProPro: FC<{
       </div>
 
       <div className="relative mt-3">
-        {useHistoryTable(history, leftInfo, rightInfo)}
+        <HistoryTable
+          history={history}
+          leftInfo={leftInfo}
+          rightInfo={rightInfo}
+        />
         {historyLoading && <InnerLoading />}
       </div>
     </div>

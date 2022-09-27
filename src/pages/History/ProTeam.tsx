@@ -4,7 +4,7 @@ import ProInfo from "pages/Pro/Info";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import api from "utils/api";
-import { useHistoryTable } from "./HistoryTable";
+import HistoryTable from "./HistoryTable";
 import useTeamInfo from "./TeamInfo";
 
 const ProTeam: FC<{
@@ -111,7 +111,11 @@ const ProTeam: FC<{
       </div>
 
       <div className="relative mt-3">
-        {useHistoryTable(history, proInfo, teamInfo)}
+        <HistoryTable
+          history={history}
+          leftInfo={proInfo}
+          rightInfo={teamInfo}
+        />
         {historyLoading && <InnerLoading />}
       </div>
     </div>
