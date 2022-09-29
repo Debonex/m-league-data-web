@@ -14,6 +14,7 @@ import {
   teamAvatarUrl,
 } from "../utils/format";
 import { umami } from "../utils/umami";
+import Button from "components/Button";
 
 const ranks: Rankable[] = [
   { key: "point", label: "Point" },
@@ -54,9 +55,11 @@ const ranks: Rankable[] = [
 ];
 
 const LeaderBoard: FC = () => {
+  // pro or team rank
+  const [rankBy, setRankBy] = useState<"pro" | "team">("pro");
   // current rankable item
   const [rank, setRank] = useState<Rankable>({ key: "point", label: "Point" });
-  const [list, setList] = useState<ProValue[]>([]);
+  const [list, setList] = useState<RankValue[]>([]);
   // if mobile rankable items show
   const [rankableShow, setRankableShow] = useState(false);
   const [listLoading, setListLoading] = useState(false);
@@ -73,7 +76,7 @@ const LeaderBoard: FC = () => {
 
   const fetchRank = async () => {
     setListLoading(true);
-    const res = await api.post<ProValue[]>("/pro/rank", {
+    const res = await api.post<RankValue[]>(`/${rankBy}/rank`, {
       key: rank.key,
       ...(seasonsLoading ? {} : { seasons: chosenSeasons }),
     });
@@ -90,14 +93,14 @@ const LeaderBoard: FC = () => {
     } else {
       setList([]);
     }
-  }, [rank, chosenSeasons]);
+  }, [rank, chosenSeasons, rankBy]);
 
   const changeAsc = () => {
     setAsc(!asc);
     setListAsc(list, !asc);
   };
 
-  const setListAsc = (list: ProValue[], asc: boolean) => {
+  const setListAsc = (list: RankValue[], asc: boolean) => {
     setList(list.sort((a, b) => (asc ? a.value - b.value : b.value - a.value)));
   };
 
@@ -159,7 +162,25 @@ const LeaderBoard: FC = () => {
         />
       </div>
 
-      <div className="h-full grid-rows-[auto,minmax(0,1fr)] overflow-auto md:grid">
+      <div className="h-full grid-rows-[auto,auto,minmax(0,1fr)] overflow-auto md:grid">
+        <div
+          className={clsx(
+            "mb-4 flex rounded-lg border-2 p-3",
+            "dark:border-dark-outstand dark:bg-dark-secondary"
+          )}
+        >
+          <Button active={rankBy === "pro"} onClick={() => setRankBy("pro")}>
+            {t("选手")}
+          </Button>
+          <Button
+            active={rankBy === "team"}
+            onClick={() => setRankBy("team")}
+            className="ml-2"
+          >
+            {t("队伍")}
+          </Button>
+        </div>
+
         <div
           className={clsx(
             "relative mb-4 rounded-lg border-2 p-3",
@@ -185,9 +206,9 @@ const LeaderBoard: FC = () => {
                 "backdrop-blur-md dark:bg-dark-secondary/80 dark:text-white/50"
               )}
             >
-              <div className="w-16 pl-5 md:w-1/5">{t("排名")}</div>
+              <div className="w-auto pl-1 md:w-1/5 md:pl-5">{t("排名")}</div>
               <div className="flex-shrink-0 flex-grow basis-0 text-center md:text-left">
-                {t("姓名")}
+                {t(rankBy === "pro" ? "姓名" : "队伍")}
               </div>
               <div
                 className="flex flex-shrink-0 flex-grow basis-0 cursor-pointer items-center text-center md:text-left"
@@ -200,7 +221,7 @@ const LeaderBoard: FC = () => {
             <div>
               {list.map((item, idx) => (
                 <RankItem
-                  key={item.pro_id}
+                  key={(item as ProValue).pro_id ?? item.team_id}
                   rank={idx + 1}
                   item={item}
                   rankInnerClass={clsx({
@@ -256,17 +277,30 @@ const RankableItem: FC<{
 
 const RankItem: FC<{
   rank: number;
-  item: ProValue;
+  item: RankValue;
   rankInnerClass: string;
   rankOuterClass: string;
   format?: (value: number) => string;
 }> = (props) => {
-  const item = props.item;
+  let item = props.item;
+  let link, avatarUrl, name;
+  if ((item as ProValue).pro_id) {
+    item = item as ProValue;
+    link = `/pro?id=${item.pro_id}`;
+    avatarUrl = proAvatarUrl(item.pro_id);
+    name = item.pro_name;
+  } else {
+    item = item as TeamValue;
+    link = `/team?id=${item.team_id}`;
+    avatarUrl = null;
+    name = item.team_name;
+  }
+
   return (
     <Link
-      to={`/pro?id=${item.pro_id}`}
+      to={link}
       className={clsx(
-        "group relative mt-1 flex items-center overflow-hidden rounded-l-lg transition-colors",
+        "group relative mt-1 flex items-center overflow-hidden rounded-l-lg transition-[color]",
         "dark:odd:bg-dark-outstand dark:hover:text-white/50"
       )}
     >
@@ -279,11 +313,13 @@ const RankItem: FC<{
         <div className={clsx(props.rankInnerClass, "pl-3")}>{props.rank}</div>
       </div>
       <div className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left">
-        <img
-          src={proAvatarUrl(item.pro_id)}
-          className="w-6 rounded-full md:w-8"
-        />
-        <span className="ml-2 md:ml-4">{item.pro_name}</span>
+        {avatarUrl && (
+          <img
+            src={avatarUrl}
+            className="mr-2 w-6 rounded-full md:mr-4 md:w-8"
+          />
+        )}
+        <span>{name}</span>
         <img
           src={teamAvatarUrl(item.team_id)}
           className="absolute top-1/2 left-1/2  w-20 -translate-x-1/2 -translate-y-1/2 opacity-10"

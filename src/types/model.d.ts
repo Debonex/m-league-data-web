@@ -14,6 +14,14 @@ type ProValue = {
   value: number;
 };
 
+type TeamValue = {
+  team_id: number;
+  team_name: string;
+  value: number;
+};
+
+type RankValue = ProValue | TeamValue;
+
 type TeamInfo = {
   id: number;
   team_name: string;
