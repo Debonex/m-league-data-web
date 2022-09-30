@@ -2,6 +2,7 @@ import clsx from "clsx";
 import Navigator from "components/Navigator";
 import History from "pages/History/History";
 import LeaderBoard from "pages/LeaderBoard";
+import League from "pages/League";
 import Pro from "pages/Pro/Pro";
 import Team from "pages/Team";
 import Teams from "pages/Teams";
@@ -37,6 +38,7 @@ const App: FC = () => {
             <Route path="/leader-board" element={<LeaderBoard />} />
             <Route path="/history" element={<History />} />
             <Route path="/pro" element={<Pro />} />
+            <Route path="/league" element={<League />} />
           </Routes>
         </div>
       </div>

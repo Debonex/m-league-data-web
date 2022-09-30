@@ -55,7 +55,6 @@ const PercentageChart: FC<PieChartProps> = ({ data, className, style }) => {
         {
           type: "pie",
           radius: "50%",
-          // TODO light color
           label: { color: "#fff" },
           data,
           emphasis: {

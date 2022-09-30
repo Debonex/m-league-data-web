@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import api from "utils/api";
 
-const useChoseSeasons = () => {
+const useChooseSeasons = () => {
   const [seasons, setSeasons] = useState<SeasonInfo[]>([]);
   const [chosenSeasons, setChosenSeasons] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
@@ -83,4 +83,4 @@ const useChoseSeasons = () => {
   };
 };
 
-export default useChoseSeasons;
+export default useChooseSeasons;

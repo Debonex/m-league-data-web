@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import api from "../utils/api";
 import Card from "../components/Card";
-import useChoseSeasons from "../hooks/useChoseSeasons";
+import useChooseSeasons from "../hooks/useChooseSeasons";
 import { dateStrToAge, proAvatarUrl } from "../utils/format";
 import StatisticData from "./components/StatisticData";
 
@@ -21,7 +21,7 @@ const Team: FC = () => {
     loading: seasonsLoading,
     CheckButtons,
     Checkboxes,
-  } = useChoseSeasons();
+  } = useChooseSeasons();
 
   useEffect(() => {
     api
