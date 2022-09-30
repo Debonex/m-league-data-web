@@ -5,7 +5,7 @@ import MenuItem from "components/headless/MenuItem";
 import MenuItems from "components/headless/MenuItems";
 import { ReactComponent as GithubSvg } from "components/svg/github.svg";
 import { ReactComponent as LangSvg } from "components/svg/Lang.svg";
-import { FC, useCallback, useRef } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation } from "react-router-dom";
 import { langs } from "utils/constants";
@@ -15,6 +15,7 @@ const navItems = [
   { link: "/teams", label: "队伍" },
   { link: "/leader-board", label: "排名" },
   { link: "/history", label: "对战记录" },
+  { link: "/league", label: "联盟" },
 ];
 
 const Navigator: FC<{ className?: string }> = (props) => {
@@ -48,26 +49,44 @@ const Navigator: FC<{ className?: string }> = (props) => {
 
 const NavigatorLinks: FC = () => {
   const { t } = useTranslation();
+  const [indicatorState, setIndicatorState] = useState<{
+    left: number;
+    width: number;
+  }>({ left: 0, width: 0 });
   const root = useRef<HTMLDivElement>(null);
   const indicator = useRef<HTMLSpanElement>(null);
   const links = navItems.map(() => useRef<HTMLAnchorElement>(null));
 
   const location = useLocation();
 
-  let indicatorLeft = 0,
-    indicatorWidth = 0;
+  useEffect(() => {
+    const observer = new ResizeObserver(updateIndicator);
+    if (root.current) {
+      observer.observe(root.current);
+      return () => {
+        observer.unobserve(root.current);
+      };
+    }
+    updateIndicator();
+  }, [location]);
+
   const activeIdx = navItems.findIndex(
     (item) => item.link === location.pathname
   );
-  if (activeIdx >= 0) {
-    const activeLink = links[activeIdx];
-    if (activeLink.current && root.current) {
-      const linkRect = activeLink.current.getClientRects()[0];
-      const rootRect = root.current.getClientRects()[0];
-      indicatorLeft = linkRect.x - rootRect.x;
-      indicatorWidth = linkRect.width;
+
+  const updateIndicator = useCallback(() => {
+    if (activeIdx >= 0) {
+      const activeLink = links[activeIdx];
+      if (activeLink.current && root.current) {
+        const linkRect = activeLink.current.getClientRects()[0];
+        const rootRect = root.current.getClientRects()[0];
+        setIndicatorState({
+          width: linkRect.width,
+          left: linkRect.x - rootRect.x,
+        });
+      }
     }
-  }
+  }, [activeIdx]);
 
   return (
     <div className="relative px-3 pb-2" ref={root}>
@@ -88,8 +107,8 @@ const NavigatorLinks: FC = () => {
         ref={indicator}
         className="absolute bottom-0 left-0 h-0.5 bg-primary-main transition-transform duration-300"
         style={{
-          width: indicatorWidth,
-          transform: `translateX(${indicatorLeft}px)`,
+          width: indicatorState.width,
+          transform: `translateX(${indicatorState.left}px)`,
         }}
       />
     </div>
