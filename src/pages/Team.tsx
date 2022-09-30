@@ -60,8 +60,14 @@ const Team: FC = () => {
       <Card title={t("队伍成员")} loading={listLoading}>
         <div className="grid grid-cols-1 gap-12 p-12 md:grid-cols-2">
           {list.map((pro) => (
-            <Link to={`/pro?id=${pro.id}`} key={pro.id} className="flex">
-              <img src={proAvatarUrl(pro.id)} className="rounded-full" />
+            <Link to={`/pro?id=${pro.id}`} key={pro.id} className="group flex">
+              <img
+                src={proAvatarUrl(pro.id)}
+                className={clsx(
+                  "scale-95 rounded-full shadow-md shadow-primary-outstand transition-all",
+                  "group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-primary-main"
+                )}
+              />
               <div className="ml-4 flex flex-col justify-center">
                 <div className="text-xl font-semibold">{pro.pro_name}</div>
                 <div className="mt-4 md:flex">

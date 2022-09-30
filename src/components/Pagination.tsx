@@ -69,21 +69,25 @@ const Pagination: FC<PaginationProps> = ({ count, onChange, className }) => {
 
   return (
     <nav className={clsx("flex items-center", className)}>
-      <Button
-        className="!p-2"
-        disabled={current === 1}
-        onClick={() => changePage(1)}
-      >
-        <Arrow up={true} className="h-4 -rotate-90" />
-      </Button>
+      {count > 0 && (
+        <Button
+          className="!p-2"
+          disabled={current === 1}
+          onClick={() => changePage(1)}
+        >
+          <Arrow up={true} className="h-4 -rotate-90" />
+        </Button>
+      )}
       {pageItems}
-      <Button
-        className="!p-2"
-        disabled={current === count}
-        onClick={() => changePage(count)}
-      >
-        <Arrow up={true} className="h-4 rotate-90" />
-      </Button>
+      {count > 0 && (
+        <Button
+          className="!p-2"
+          disabled={current === count}
+          onClick={() => changePage(count)}
+        >
+          <Arrow up={true} className="h-4 rotate-90" />
+        </Button>
+      )}
     </nav>
   );
 };

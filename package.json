@@ -21,6 +21,7 @@
     "i18next": "^21.9.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-flip-move": "^3.0.4",
     "react-helmet": "^6.1.0",
     "react-i18next": "^11.18.5",
     "react-router-dom": "^6.3.0",

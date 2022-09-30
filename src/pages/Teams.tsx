@@ -35,8 +35,8 @@ const Teams: FC = () => {
           to={`/team?id=${team.id}`}
           key={team.id}
           className={clsx(
-            "border p-2",
-            "rounded-md dark:border-dark-outstand dark:bg-dark-outstand/50"
+            "border p-2 transition-all hover:shadow-lg hover:shadow-dark-deep",
+            "rounded-md dark:border-dark-outstand dark:bg-dark-outstand/50 dark:hover:border-primary-outstand"
           )}
         >
           <div className="text-center text-xl font-semibold">

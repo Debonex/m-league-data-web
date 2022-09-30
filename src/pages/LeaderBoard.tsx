@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { FC, MouseEventHandler, useEffect, useState } from "react";
+import { FC, forwardRef, MouseEventHandler, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import api from "../utils/api";
@@ -15,6 +15,7 @@ import {
 } from "../utils/format";
 import { umami } from "../utils/umami";
 import Button from "components/Button";
+import FlipMove from "react-flip-move";
 
 const ranks: Rankable[] = [
   { key: "point", label: "Point" },
@@ -218,7 +219,7 @@ const LeaderBoard: FC = () => {
                 <Arrow className="ml-2 h-4 w-4 text-primary-main" up={asc} />
               </div>
             </div>
-            <div>
+            <FlipMove>
               {list.map((item, idx) => (
                 <RankItem
                   key={(item as ProValue).pro_id ?? item.team_id}
@@ -239,7 +240,7 @@ const LeaderBoard: FC = () => {
                   format={rank.format}
                 />
               ))}
-            </div>
+            </FlipMove>
           </div>
           {listLoading && <InnerLoading />}
         </div>
@@ -260,9 +261,10 @@ const RankableItem: FC<{
   return (
     <div
       className={clsx(
-        "cursor-pointer select-none whitespace-nowrap rounded-lg border-2 p-3",
+        "cursor-pointer select-none whitespace-nowrap rounded-lg border-2 p-3 transition-colors hover:text-primary-main",
         {
-          "dark:border-dark-outstand": rank.key !== currentRank.key,
+          "dark:border-dark-outstand dark:hover:border-primary-outstand":
+            rank.key !== currentRank.key,
           "border-primary-outstand bg-gradient-to-r from-primary-main/25 dark:to-dark-outstand":
             rank.key === currentRank.key,
         },
@@ -270,71 +272,82 @@ const RankableItem: FC<{
       )}
       onClick={props.onClick}
     >
-      <div>{t(rank.label)}</div>
+      <div
+        className={clsx({ "text-primary-main": rank.key === currentRank.key })}
+      >
+        {t(rank.label)}
+      </div>
     </div>
   );
 };
 
-const RankItem: FC<{
+type RankItemPros = {
   rank: number;
   item: RankValue;
   rankInnerClass: string;
   rankOuterClass: string;
   format?: (value: number) => string;
-}> = (props) => {
-  let item = props.item;
-  let link, avatarUrl, name;
-  if ((item as ProValue).pro_id) {
-    item = item as ProValue;
-    link = `/pro?id=${item.pro_id}`;
-    avatarUrl = proAvatarUrl(item.pro_id);
-    name = item.pro_name;
-  } else {
-    item = item as TeamValue;
-    link = `/team?id=${item.team_id}`;
-    avatarUrl = null;
-    name = item.team_name;
-  }
-
-  return (
-    <Link
-      to={link}
-      className={clsx(
-        "group relative mt-1 flex items-center overflow-hidden rounded-l-lg transition-[color]",
-        "dark:odd:bg-dark-outstand dark:hover:text-white/50"
-      )}
-    >
-      <div
-        className={clsx(
-          "w-16 rounded-l-lg bg-gradient-to-r py-2 md:w-1/5",
-          props.rankOuterClass
-        )}
-      >
-        <div className={clsx(props.rankInnerClass, "pl-3")}>{props.rank}</div>
-      </div>
-      <div className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left">
-        {avatarUrl && (
-          <img
-            src={avatarUrl}
-            className="mr-2 w-6 rounded-full md:mr-4 md:w-8"
-          />
-        )}
-        <span>{name}</span>
-        <img
-          src={teamAvatarUrl(item.team_id)}
-          className="absolute top-1/2 left-1/2  w-20 -translate-x-1/2 -translate-y-1/2 opacity-10"
-        />
-      </div>
-      <div
-        className={clsx(
-          "flex-shrink-0 flex-grow basis-0 py-2 text-center group-odd:bg-gradient-to-r md:text-left",
-          "dark:group-odd:from-dark-outstand dark:group-odd:to-dark-secondary"
-        )}
-      >
-        {props.format ? props.format(item.value) : item.value}
-      </div>
-    </Link>
-  );
 };
+
+const RankItem: FC<RankItemPros> = forwardRef<HTMLAnchorElement, RankItemPros>(
+  (props, ref) => {
+    let item = props.item;
+    let link, avatarUrl, name;
+    if ((item as ProValue).pro_id) {
+      item = item as ProValue;
+      link = `/pro?id=${item.pro_id}`;
+      avatarUrl = proAvatarUrl(item.pro_id);
+      name = item.pro_name;
+    } else {
+      item = item as TeamValue;
+      link = `/team?id=${item.team_id}`;
+      avatarUrl = null;
+      name = item.team_name;
+    }
+
+    return (
+      <Link
+        to={link}
+        ref={ref}
+        className={clsx(
+          "group relative mt-1 flex items-center overflow-hidden rounded-l-lg transition-[color]",
+          "dark:odd:bg-dark-outstand dark:hover:text-primary-main"
+        )}
+      >
+        <div
+          className={clsx(
+            "w-16 rounded-l-lg bg-gradient-to-r py-2 md:w-1/5",
+            props.rankOuterClass
+          )}
+        >
+          <div className={clsx(props.rankInnerClass, "pl-3")}>{props.rank}</div>
+        </div>
+        <div className="flex flex-shrink-0 flex-grow basis-0 items-center overflow-hidden text-center md:text-left">
+          {avatarUrl && (
+            <img
+              src={avatarUrl}
+              className="mr-2 w-6 scale-95 rounded-full transition-transform group-hover:scale-100 md:mr-4 md:w-8"
+            />
+          )}
+          <span>{name}</span>
+          <img
+            src={teamAvatarUrl(item.team_id)}
+            className="absolute top-1/2 left-1/2 w-20 -translate-x-1/2 -translate-y-1/2 opacity-10 transition-transform group-hover:scale-125"
+          />
+        </div>
+        <div
+          className={clsx(
+            "flex-shrink-0 flex-grow basis-0 py-2 text-center group-odd:bg-gradient-to-r md:text-left",
+            "dark:group-odd:from-dark-outstand dark:group-odd:to-dark-secondary"
+          )}
+        >
+          {props.format ? props.format(item.value) : item.value}
+        </div>
+      </Link>
+    );
+  }
+);
+
+RankItem.displayName = "RankItem";
 
 export default LeaderBoard;

@@ -5,22 +5,19 @@ import MenuItem from "components/headless/MenuItem";
 import MenuItems from "components/headless/MenuItems";
 import { ReactComponent as GithubSvg } from "components/svg/github.svg";
 import { ReactComponent as LangSvg } from "components/svg/Lang.svg";
-import { FC, ReactNode, useCallback } from "react";
+import { FC, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink, To } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { langs } from "utils/constants";
 import { umami } from "utils/umami";
 
+const navItems = [
+  { link: "/teams", label: "队伍" },
+  { link: "/leader-board", label: "排名" },
+  { link: "/history", label: "对战记录" },
+];
+
 const Navigator: FC<{ className?: string }> = (props) => {
-  const { t, i18n } = useTranslation();
-
-  const changeLang = useCallback((itemKey: string | number) => {
-    const langKey = itemKey as string;
-    i18n.changeLanguage(langKey);
-    localStorage.setItem("lang", langKey);
-    umami(`change-lang:${langKey}`);
-  }, []);
-
   return (
     <div
       className={clsx(
@@ -30,41 +27,8 @@ const Navigator: FC<{ className?: string }> = (props) => {
       )}
     >
       <nav className="mx-auto flex max-w-1920 items-center py-4">
-        <NavigatorLink to="/teams">{t("队伍")}</NavigatorLink>
-        <NavigatorLink to="/leader-board">{t("排名")}</NavigatorLink>
-        <NavigatorLink to="/history">{t("对战记录")}</NavigatorLink>
-
-        <Menu className="relative ml-auto" onItemClick={changeLang}>
-          <MenuButton>
-            <LangSvg
-              className={clsx(
-                "ml-auto mr-6 w-6 cursor-pointer transition-colors",
-                "dark:text-white/70 dark:hover:text-white"
-              )}
-            />
-          </MenuButton>
-          <MenuItems
-            className={clsx(
-              "absolute top-full right-0 w-max translate-y-2 rounded-sm border border-primary-outstand py-1",
-              "dark:bg-dark-secondary"
-            )}
-          >
-            {langs.map((lang) => (
-              <MenuItem
-                itemKey={lang.key}
-                className={clsx(
-                  "cursor-pointer select-none px-2 py-px transition-colors",
-                  { "text-primary-main": lang.key === i18n.language },
-                  "hover:bg-dark-outstand"
-                )}
-                key={lang.key}
-              >
-                {lang.label}
-              </MenuItem>
-            ))}
-          </MenuItems>
-        </Menu>
-
+        <NavigatorLinks />
+        <LangButton className="ml-auto" />
         <GithubSvg
           className={clsx(
             "mr-6 w-6 cursor-pointer transition-colors",
@@ -82,19 +46,97 @@ const Navigator: FC<{ className?: string }> = (props) => {
   );
 };
 
-const NavigatorLink: FC<{ to: To; children: ReactNode }> = (props) => {
+const NavigatorLinks: FC = () => {
+  const { t } = useTranslation();
+  const root = useRef<HTMLDivElement>(null);
+  const indicator = useRef<HTMLSpanElement>(null);
+  const links = navItems.map(() => useRef<HTMLAnchorElement>(null));
+
+  const location = useLocation();
+
+  let indicatorLeft = 0,
+    indicatorWidth = 0;
+  const activeIdx = navItems.findIndex(
+    (item) => item.link === location.pathname
+  );
+  if (activeIdx >= 0) {
+    const activeLink = links[activeIdx];
+    if (activeLink.current && root.current) {
+      const linkRect = activeLink.current.getClientRects()[0];
+      const rootRect = root.current.getClientRects()[0];
+      indicatorLeft = linkRect.x - rootRect.x;
+      indicatorWidth = linkRect.width;
+    }
+  }
+
   return (
-    <NavLink
-      className={({ isActive }) =>
-        clsx("ml-6 transition-colors", {
-          "border-b-2 dark:border-white dark:text-white": isActive,
-          "dark:text-white/70 dark:hover:text-white": !isActive,
-        })
-      }
-      to={props.to}
-    >
-      {props.children}
-    </NavLink>
+    <div className="relative px-3 pb-2" ref={root}>
+      {navItems.map((item, idx) => (
+        <NavLink
+          className={clsx("px-3 transition-colors", {
+            "dark:text-primary-main": activeIdx === idx,
+            "dark:text-white/70 dark:hover:text-white": activeIdx !== idx,
+          })}
+          to={item.link}
+          key={idx}
+          ref={links[idx]}
+        >
+          {t(item.label)}
+        </NavLink>
+      ))}
+      <span
+        ref={indicator}
+        className="absolute bottom-0 left-0 h-0.5 bg-primary-main transition-transform duration-300"
+        style={{
+          width: indicatorWidth,
+          transform: `translateX(${indicatorLeft}px)`,
+        }}
+      />
+    </div>
+  );
+};
+
+const LangButton: FC<{ className?: string }> = ({ className }) => {
+  const { i18n } = useTranslation();
+
+  const changeLang = useCallback((itemKey: string | number) => {
+    const langKey = itemKey as string;
+    i18n.changeLanguage(langKey);
+    localStorage.setItem("lang", langKey);
+    umami(`change-lang:${langKey}`);
+  }, []);
+
+  return (
+    <Menu className={clsx(className, "relative")} onItemClick={changeLang}>
+      <MenuButton>
+        <LangSvg
+          className={clsx(
+            "ml-auto mr-6 w-6 cursor-pointer transition-colors",
+            "dark:text-white/70 dark:hover:text-white"
+          )}
+        />
+      </MenuButton>
+      <MenuItems
+        className={clsx(
+          "absolute top-full right-0 w-max translate-y-2 rounded-sm border border-primary-outstand py-1",
+          "dark:bg-dark-secondary"
+        )}
+      >
+        {langs.map((lang) => (
+          <MenuItem
+            itemKey={lang.key}
+            className={clsx(
+              "cursor-pointer select-none px-2 py-px transition-colors",
+              { "text-primary-main": lang.key === i18n.language },
+              "hover:bg-dark-outstand"
+            )}
+            key={lang.key}
+          >
+            {lang.label}
+          </MenuItem>
+        ))}
+      </MenuItems>
+    </Menu>
   );
 };
 

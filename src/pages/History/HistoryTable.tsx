@@ -33,9 +33,7 @@ const HistoryTable: FC<HistoryTableProps> = ({
       loseWidth = `${(loseCount / total) * 100}%`;
     }
   }
-  const totalPage = history
-    ? Math.floor(history.games.length / perPage) + 1
-    : 1;
+  const totalPage = history ? Math.ceil(history.games.length / perPage) : 0;
 
   const games = history
     ? history.games.slice((currentPage - 1) * perPage, currentPage * perPage)
