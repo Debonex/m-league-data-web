@@ -84,7 +84,13 @@ const LeaderBoard: FC = () => {
     setListLoading(false);
     if (res.status === 200) {
       setAsc(!!rank.asc);
-      setListAsc(res.data, !!rank.asc);
+      setListAsc(
+        res.data.map((item) => ({
+          ...item,
+          showValue: rank.format ? rank.format(item.value) : item.value,
+        })),
+        !!rank.asc
+      );
     }
   };
 
@@ -237,7 +243,6 @@ const LeaderBoard: FC = () => {
                     "from-silver/25 dark:to-dark-secondary": idx === 1,
                     "from-bronze/25 dark:to-dark-outstand": idx === 2,
                   })}
-                  format={rank.format}
                 />
               ))}
             </FlipMove>
@@ -286,7 +291,6 @@ type RankItemPros = {
   item: RankValue;
   rankInnerClass: string;
   rankOuterClass: string;
-  format?: (value: number) => string;
 };
 
 const RankItem: FC<RankItemPros> = forwardRef<HTMLAnchorElement, RankItemPros>(
@@ -341,7 +345,7 @@ const RankItem: FC<RankItemPros> = forwardRef<HTMLAnchorElement, RankItemPros>(
             "dark:group-odd:from-dark-outstand dark:group-odd:to-dark-secondary"
           )}
         >
-          {props.format ? props.format(item.value) : item.value}
+          {item.showValue}
         </div>
       </Link>
     );
