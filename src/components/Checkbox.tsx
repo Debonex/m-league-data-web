@@ -1,11 +1,11 @@
 import clsx from "clsx";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 type CheckboxProps = {
   value: unknown;
   checked: boolean;
   onChange: (checked: boolean) => void;
-  label?: string;
+  label?: ReactNode;
 };
 
 const Checkbox: FC<CheckboxProps> = (props) => {

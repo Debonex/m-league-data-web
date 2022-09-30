@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Button from "components/Button";
 import InnerLoading from "components/InnerLoading";
 import { SelectOption } from "components/Select";
-import useChoseSeasons from "hooks/useChoseSeasons";
+import useChooseSeasons from "hooks/useChooseSeasons";
 import { FC, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import api from "utils/api";
@@ -17,7 +17,7 @@ const History: FC = () => {
     loading: seasonsLoading,
     Checkboxes: SeasonCheckboxes,
     CheckButtons: SeasonCheckButtons,
-  } = useChoseSeasons();
+  } = useChooseSeasons();
 
   const [options, setOptions] = useState<{
     pro: SelectOption[];

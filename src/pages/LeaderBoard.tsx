@@ -6,7 +6,7 @@ import api from "../utils/api";
 import Arrow from "../components/Arrow";
 import InnerLoading from "../components/InnerLoading";
 import { ReactComponent as FilterSvg } from "../components/svg/Filter.svg";
-import useChoseSeasons from "../hooks/useChoseSeasons";
+import useChooseSeasons from "../hooks/useChooseSeasons";
 import {
   fixed,
   percentage,
@@ -73,7 +73,7 @@ const LeaderBoard: FC = () => {
     loading: seasonsLoading,
     Checkboxes: SeasonCheckboxes,
     CheckButtons: SeasonCheckButtons,
-  } = useChoseSeasons();
+  } = useChooseSeasons();
 
   const fetchRank = async () => {
     setListLoading(true);

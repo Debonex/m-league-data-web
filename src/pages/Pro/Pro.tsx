@@ -1,5 +1,5 @@
 import Card from "components/Card";
-import useChoseSeasons from "hooks/useChoseSeasons";
+import useChooseSeasons from "hooks/useChooseSeasons";
 import StatisticData from "pages/components/StatisticData";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,7 +20,7 @@ const Pro: FC = () => {
     loading: seasonsLoading,
     CheckButtons,
     Checkboxes,
-  } = useChoseSeasons();
+  } = useChooseSeasons();
 
   useEffect(() => {
     api
