@@ -17,7 +17,7 @@ export const dateStrToAge = (dateStr: string) => {
 export const proAvatarUrl = (proId: number) => `${ossUrl}/avatars/${proId}.png`;
 
 export const teamAvatarUrl = (teamId: number) =>
-  `${ossUrl}/teams/${teamId}.${[8, 1].includes(teamId) ? "png" : "svg"}`;
+  `${ossUrl}/teams/${teamId}.${[8, 1, 9].includes(teamId) ? "png" : "svg"}`;
 
 export const formatPoint = (point: number) => {
   if (point < 0) {
